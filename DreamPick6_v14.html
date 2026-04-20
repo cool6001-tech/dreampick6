@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DreamPick 6 🌙</title>
+
+<!-- PWA 메타태그 -->
+<meta name="theme-color" content="#020510"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="DreamPick 6"/>
+<meta name="description" content="AI 꿈 해몽 + 오행 수리학 로또 번호 — DreamPick 6"/>
+<link rel="apple-touch-icon" href="https://image.pollinations.ai/prompt/mystical%20moon%20app%20icon%20dark%20navy%20neon%20blue%20minimal?width=180&height=180&nologo=true&seed=6"/>
+<link rel="manifest" href="data:application/json,{%22name%22:%22DreamPick%206%22,%22short_name%22:%22DreamPick%206%22,%22description%22:%22AI%20%EA%BF%88%20%ED%95%B4%EB%AA%BD%20%2B%20%EC%98%A4%ED%96%89%20%EC%88%98%EB%A6%AC%ED%95%99%20%EB%A1%9C%EB%98%90%20%EB%B2%88%ED%98%B8%22,%22start_url%22:%22/%22,%22display%22:%22standalone%22,%22background_color%22:%22%23020510%22,%22theme_color%22:%22%23020510%22,%22icons%22:[{%22src%22:%22https://image.pollinations.ai/prompt/mystical%20moon%20app%20icon%20dark%20navy%20neon%20blue%20minimal?width=192&height=192&nologo=true&seed=6%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22},{%22src%22:%22https://image.pollinations.ai/prompt/mystical%20moon%20app%20icon%20dark%20navy%20neon%20blue%20minimal?width=512&height=512&nologo=true&seed=6%22,%22sizes%22:%22512x512%22,%22type%22:%22image/png%22}]}"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#020510;--panel:#060d1f;--card:#0a1528;--az:#00d4ff;--vi:#7b2fff;--go:#ffd700;--gr:#00ff88;--pk:#ff2d78;--bd:rgba(0,212,255,0.18);--tx:#e8f4ff;--dim:#5a7a99;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--tx);font-family:'Noto Sans KR',sans-serif;min-height:100vh;}
+.gb{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,212,255,0.04)1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.04)1px,transparent 1px);background-size:48px 48px;}
+.gb::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,80,180,0.18),transparent 70%);}
+.sl{position:fixed;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07)2px,rgba(0,0,0,0.07)4px);}
+.w{position:relative;z-index:2;max-width:900px;margin:0 auto;padding:0 16px 80px;}
+.hd{text-align:center;padding:28px 0 18px;}
+.lr{display:inline-flex;align-items:center;gap:13px;margin-bottom:8px;}
+.li{width:44px;height:44px;border:2px solid var(--az);border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(0,212,255,0.5);animation:pg 2.8s ease-in-out infinite;}
+@keyframes pg{0%,100%{box-shadow:0 0 18px rgba(0,212,255,0.5);}50%{box-shadow:0 0 28px rgba(0,212,255,0.8);}}
+.lt{font-family:'Orbitron',monospace;font-size:clamp(1.5rem,4vw,2.2rem);font-weight:900;background:linear-gradient(135deg,#fff,var(--az)50%,var(--vi));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.sl2{font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--dim);letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;}
+.sl2 b{color:var(--az);font-weight:400;}
+.hl{width:100%;height:1px;margin-top:18px;background:linear-gradient(90deg,transparent,var(--az),var(--vi),transparent);}
+.p{background:var(--panel);border:1px solid var(--bd);border-radius:14px;padding:18px;position:relative;overflow:hidden;margin-bottom:14px;}
+.p::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(0,212,255,0.05),transparent 70%);pointer-events:none;}
+.pl{font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:var(--az);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.pl::before{content:'//';opacity:0.5;}
+.cd{position:absolute;width:12px;height:12px;border-color:var(--az);border-style:solid;opacity:0.33;}
+.cd.tl{top:7px;left:7px;border-width:2px 0 0 2px;}.cd.tr{top:7px;right:7px;border-width:2px 2px 0 0;}
+.cd.bl{bottom:7px;left:7px;border-width:0 0 2px 2px;}.cd.br{bottom:7px;right:7px;border-width:0 2px 2px 0;}
+.ta{width:100%;min-height:110px;background:var(--card);border:1px solid var(--bd);border-radius:10px;color:var(--tx);font-family:'Noto Sans KR',sans-serif;font-size:0.87rem;line-height:1.7;padding:12px;resize:vertical;outline:none;}
+.ta::placeholder{color:var(--dim);font-style:italic;}
+.ta:focus{border-color:var(--az);}
+.btn{width:100%;margin-top:10px;padding:13px;background:transparent;border:2px solid var(--az);border-radius:10px;color:var(--az);font-family:'Orbitron',monospace;font-size:0.8rem;font-weight:700;letter-spacing:0.15em;cursor:pointer;position:relative;overflow:hidden;transition:all .3s;}
+.btn:hover:not(:disabled){background:rgba(0,212,255,0.08);color:#fff;}
+.btn:disabled{opacity:.44;cursor:not-allowed;}
+.cl{position:absolute;top:50%;left:-100%;width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--az),transparent);animation:cs 1.2s linear infinite;}
+@keyframes cs{to{left:100%;}}
+.et{background:rgba(255,45,120,.1);border:1px solid rgba(255,45,120,.33);border-radius:8px;padding:8px 12px;font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--pk);margin-top:8px;}
+.dg{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:13px;}
+@media(max-width:540px){.dg{grid-template-columns:1fr;}}
+/* OVERLAY */
+.dv-overlay{position:fixed;inset:0;z-index:100;pointer-events:none;display:flex;align-items:center;justify-content:center;}
+.dv-bd{position:absolute;inset:0;background:#020510;animation:bdIn .35s ease forwards;}
+.dv-overlay.exit .dv-bd{animation:bdOut .7s ease forwards;}
+@keyframes bdIn{from{opacity:0;}to{opacity:1;}}@keyframes bdOut{from{opacity:1;}to{opacity:0;}}
+.dv-c{position:absolute;width:100vw;height:100vh;overflow:hidden;animation:spEx .7s cubic-bezier(.22,1,.36,1) forwards;z-index:1;}
+@keyframes spEx{0%{opacity:0;transform:scale(.05) rotate(-540deg);border-radius:50%;}60%{opacity:1;transform:scale(1.04) rotate(10deg);}100%{opacity:1;transform:scale(1) rotate(0deg);border-radius:0;}}
+.dv-overlay.exit .dv-c{animation:spCo .85s cubic-bezier(.55,0,1,.45) forwards;}
+@keyframes spCo{0%{opacity:1;transform:scale(1);}75%{opacity:.7;transform:scale(.08) rotate(420deg);border-radius:50%;}100%{opacity:0;transform:scale(.04) rotate(540deg);}}
+.dv-scan{position:absolute;left:0;right:0;height:3px;top:-3px;background:linear-gradient(90deg,transparent,rgba(0,212,255,.9),transparent);animation:sw 1.1s linear 2;}
+@keyframes sw{to{top:100%;}}
+.dv-gl{position:absolute;inset:0;animation:gl 1.8s ease forwards;}
+@keyframes gl{0%,100%,8%,23%,56%{background:none;}7%{background:rgba(0,212,255,.07);}22%{background:rgba(123,47,255,.05);}55%{background:rgba(0,212,255,.04);}}
+.dv-co{position:absolute;width:42px;height:42px;border-color:var(--az);border-style:solid;}
+.dv-co.tl{top:20px;left:20px;border-width:2px 0 0 2px;}.dv-co.tr{top:20px;right:20px;border-width:2px 2px 0 0;}
+.dv-co.bl{bottom:20px;left:20px;border-width:0 0 2px 2px;}.dv-co.br{bottom:20px;right:20px;border-width:0 2px 2px 0;}
+.dv-xh{position:absolute;top:50%;left:50%;width:88px;height:88px;animation:xhF 1.8s ease forwards;}
+@keyframes xhF{0%{opacity:0;transform:translate(-50%,-50%) scale(2.5) rotate(-90deg);}25%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0deg);}80%{opacity:1;}100%{opacity:0;transform:translate(-50%,-50%);}}
+.dv-tag{position:absolute;top:28px;left:50%;transform:translateX(-50%);font-family:'Orbitron',monospace;font-size:.66rem;color:rgba(0,212,255,.7);letter-spacing:.3em;white-space:nowrap;padding:4px 14px;border:1px solid rgba(0,212,255,.25);border-radius:20px;background:rgba(0,212,255,.06);animation:tgA 1.8s ease forwards;}
+@keyframes tgA{0%{opacity:0;}25%{opacity:1;}80%{opacity:1;}100%{opacity:0;}}
+.dv-st{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--az);letter-spacing:.2em;animation:stB .45s ease infinite alternate;}
+@keyframes stB{from{opacity:.4;}to{opacity:1;}}
+/* DREAM CARD */
+.dc-wrap{padding:0;margin-bottom:0;animation:cIn .55s cubic-bezier(.34,1.4,.64,1) forwards;}
+@keyframes cIn{0%{opacity:0;transform:scale(.06) rotate(360deg);border-radius:50%;}60%{opacity:1;transform:scale(1.05) rotate(-8deg);}100%{opacity:1;transform:scale(1) rotate(0deg);border-radius:14px;}}
+.dc{aspect-ratio:4/3;border-radius:12px;overflow:hidden;position:relative;border:1px solid var(--bd);background:#020510;}
+.dc svg{width:100%;height:100%;display:block;}
+.dc-wrap .dc{animation:gP 1.6s ease .4s forwards;box-shadow:none;}
+@keyframes gP{45%{box-shadow:0 0 35px rgba(0,212,255,.55);}100%{box-shadow:0 0 8px rgba(0,212,255,.14);}}
+.dc-ot{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(2,5,16,.15)0%,transparent 35%,rgba(2,5,16,.7)65%,rgba(2,5,16,.92)100%);display:flex;flex-direction:column;justify-content:flex-end;padding:13px;}
+.dc-dt{font-size:.74rem;color:rgba(232,244,255,.9);line-height:1.5;font-style:italic;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.dc-it{font-size:.65rem;color:rgba(0,212,255,.85);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.dc-tr{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;align-items:center;}
+.dc-badge{font-family:'Share Tech Mono',monospace;font-size:.5rem;color:rgba(0,212,255,.6);letter-spacing:.1em;background:rgba(2,5,16,.65);padding:2px 7px;border-radius:4px;border:1px solid rgba(0,212,255,.2);}
+.dc-lbl{font-family:'Share Tech Mono',monospace;font-size:.5rem;color:rgba(0,212,255,.4);}
+/* GAUGES */
+.gau{display:flex;flex-direction:column;gap:13px;}
+.gh{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+.gn{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--dim);}
+.gv{font-family:'Orbitron',monospace;font-size:.9rem;font-weight:700;}
+.gu{font-family:'Share Tech Mono',monospace;font-size:.5rem;color:var(--dim);margin-left:2px;}
+.gtr{height:7px;background:rgba(255,255,255,.05);border-radius:4px;overflow:hidden;position:relative;}
+.gf{height:100%;border-radius:4px;transition:width 1.4s cubic-bezier(.23,1,.32,1);width:0%;}
+.gtk{position:absolute;top:-2px;bottom:-2px;width:1px;background:rgba(255,255,255,.1);}
+.gw .gv{color:var(--go);}.gw .gf{background:linear-gradient(90deg,#7a5200,var(--go));}
+.gl .gv{color:var(--pk);}.gl .gf{background:linear-gradient(90deg,#5a0020,var(--pk));}
+.gs .gv{color:var(--gr);}.gs .gf{background:linear-gradient(90deg,#004520,var(--gr));}
+.pr{margin-top:7px;padding-top:9px;border-top:1px solid rgba(0,212,255,.08);}
+.ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+.plb{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--dim);}
+.pv{font-family:'Orbitron',monospace;font-size:.95rem;font-weight:700;color:var(--az);}
+.pv span{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--dim);}
+.pt{height:5px;background:rgba(0,212,255,.07);border-radius:3px;overflow:hidden;}
+.pf{height:100%;border-radius:3px;background:linear-gradient(90deg,rgba(0,80,180,.6),var(--az));transition:width 1.6s cubic-bezier(.23,1,.32,1);width:0%;}
+/* BALLS */
+.balls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;padding:10px 0 5px;}
+.ball{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-weight:900;font-size:.95rem;position:relative;cursor:default;transform:scale(0);transition:transform .5s cubic-bezier(.34,1.56,.64,1);}
+.ball.on{transform:scale(1);}
+.ball::after{content:'';position:absolute;top:6px;left:9px;width:9px;height:5px;background:rgba(255,255,255,.35);border-radius:50%;filter:blur(2px);}
+.b1{background:radial-gradient(circle at 35% 35%,#ffb347,#ff6b00);color:#fff;box-shadow:0 0 18px rgba(255,107,0,.6);}
+.b2{background:radial-gradient(circle at 35% 35%,#7affd7,#00d4ff);color:#001a2c;box-shadow:0 0 18px rgba(0,212,255,.6);}
+.b3{background:radial-gradient(circle at 35% 35%,#b794f4,#7b2fff);color:#fff;box-shadow:0 0 18px rgba(123,47,255,.6);}
+.b4{background:radial-gradient(circle at 35% 35%,#ffd700,#ffb300);color:#1a0a00;box-shadow:0 0 18px rgba(255,215,0,.6);}
+.b5{background:radial-gradient(circle at 35% 35%,#ff8fa3,#ff2d78);color:#fff;box-shadow:0 0 18px rgba(255,45,120,.6);}
+.b6{background:radial-gradient(circle at 35% 35%,#6ee7b7,#00ff88);color:#001a10;box-shadow:0 0 18px rgba(0,255,136,.6);}
+.bsm{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-weight:900;font-size:.72rem;}
+/* 번호풀이 */
+.ne{background:var(--card);border-radius:10px;padding:11px 13px;border-left:3px solid var(--az);animation:fi .35s ease;margin-bottom:8px;}
+.nt{display:flex;align-items:center;gap:9px;margin-bottom:6px;}
+.nb{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-weight:900;font-size:.75rem;flex-shrink:0;}
+.nk{font-family:'Share Tech Mono',monospace;font-size:.61rem;color:var(--az);letter-spacing:.1em;}
+.nr{font-size:.82rem;line-height:1.75;color:rgba(232,244,255,.82);font-weight:300;}
+/* 해몽 */
+.it{font-size:.85rem;line-height:1.9;color:rgba(232,244,255,.85);font-weight:300;min-height:60px;white-space:pre-wrap;}
+.ic{display:inline-block;width:6px;height:1em;background:var(--az);animation:bk .8s step-end infinite;vertical-align:text-bottom;margin-left:2px;}
+@keyframes bk{50%{opacity:0;}}
+/* 공유 패널 */
+.sp{background:var(--panel);border:1px solid rgba(0,212,255,.2);border-radius:14px;padding:16px 18px;margin-bottom:14px;position:relative;}
+.sb{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;}
+@media(max-width:480px){.sb{grid-template-columns:1fr;}}
+.sbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:12px 7px;border-radius:10px;cursor:pointer;border:1px solid rgba(255,255,255,.08);background:var(--card);transition:all .25s;user-select:none;}
+.sbtn:hover{transform:translateY(-2px);}
+.si{font-size:1.3rem;}
+.sl3{font-family:'Share Tech Mono',monospace;font-size:.57rem;letter-spacing:.07em;text-align:center;line-height:1.4;}
+.sbtn.lk{border-color:rgba(0,212,255,.3);color:var(--az);}
+.sbtn.pg{border-color:rgba(0,255,136,.3);color:var(--gr);}
+.sbtn.kk{background:#FEE500;color:#3C1E1E;border-color:#FEE500;}
+.sbtn.kk .sl3{color:#3C1E1E;}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:rgba(0,212,255,.15);border:1px solid var(--az);color:var(--az);padding:9px 20px;border-radius:20px;font-family:'Share Tech Mono',monospace;font-size:.7rem;z-index:9999;animation:fi .3s ease;white-space:nowrap;}
+/* 쿠팡 패널 */
+.cp{margin-bottom:14px;border-radius:14px;overflow:hidden;position:relative;border:1px solid var(--cpb,rgba(255,215,0,.25));}
+.cp::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 50% -5%,var(--cpg,rgba(255,215,0,.07)),transparent 65%);}
+.cpi{background:var(--panel);padding:18px;position:relative;}
+.cph{display:flex;align-items:center;gap:11px;margin-bottom:11px;}
+.cpo{font-size:1.4rem;animation:oF 3s ease-in-out infinite;}
+@keyframes oF{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+.cpn{font-family:'Orbitron',monospace;font-size:.9rem;font-weight:900;background:linear-gradient(135deg,#fff,var(--cpc,#ffd700));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.cps{font-size:.68rem;color:var(--dim);margin-top:2px;}
+.cpt{display:flex;border:1px solid rgba(255,255,255,.08);border-radius:8px;overflow:hidden;margin-bottom:12px;}
+.cptb{flex:1;padding:7px 0;text-align:center;cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--dim);background:transparent;border:none;transition:all .25s;}
+.cptb.act{font-weight:700;}
+.cpr{font-size:.81rem;line-height:1.75;color:rgba(232,244,255,.75);font-weight:300;margin-bottom:12px;padding:9px 11px;background:rgba(255,255,255,.03);border-radius:8px;border-left:2px solid var(--cpc,#ffd700);}
+.cpg{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:12px;}
+@media(max-width:540px){.cpg{grid-template-columns:1fr;}}
+.cpit{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:12px 10px;display:flex;flex-direction:column;gap:5px;position:relative;transition:border-color .25s,transform .2s;cursor:pointer;text-decoration:none;}
+.cpit:hover{transform:translateY(-2px);}
+.cptg{position:absolute;top:7px;right:7px;font-family:'Share Tech Mono',monospace;font-size:.48rem;font-weight:700;padding:2px 6px;border-radius:10px;background:var(--cpc,#ffd700);color:#020510;}
+.cpem{font-size:1.4rem;line-height:1;}
+.cpnm{font-size:.78rem;font-weight:500;color:var(--tx);line-height:1.35;}
+.cppr{font-family:'Orbitron',monospace;font-size:.73rem;font-weight:700;color:var(--cpc,#ffd700);}
+.cpbt{margin-top:3px;padding:5px 7px;background:transparent;border:1px solid var(--cpc,#ffd700);border-radius:6px;color:var(--cpc,#ffd700);font-family:'Share Tech Mono',monospace;font-size:.56rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;}
+.cpit:hover .cpbt{background:var(--cpc,#ffd700);color:#020510;}
+.cpf{display:flex;align-items:center;justify-content:space-between;padding-top:11px;border-top:1px solid rgba(255,255,255,.06);}
+.cpnt{font-family:'Share Tech Mono',monospace;font-size:.53rem;color:var(--dim);line-height:1.6;}
+.cpnt b{display:block;font-size:.57rem;margin-bottom:1px;}
+.cpab{padding:6px 12px;border-radius:8px;border:1.5px solid var(--cpc,#ffd700);background:transparent;color:var(--cpc,#ffd700);font-family:'Orbitron',monospace;font-size:.58rem;font-weight:700;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;gap:3px;transition:all .25s;}
+.cpab:hover{background:var(--cpc,#ffd700);color:#020510;}
+/* 저널 */
+.js{margin-top:24px;}
+.jt{font-family:'Orbitron',monospace;font-size:.8rem;font-weight:700;color:var(--vi);letter-spacing:.1em;margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.jt::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(123,47,255,.4),transparent);}
+.tl{position:relative;padding-left:18px;}
+.tl::before{content:'';position:absolute;left:5px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,var(--vi),transparent);}
+.ji{position:relative;margin-bottom:12px;}
+.jdot{position:absolute;left:-15px;top:6px;width:8px;height:8px;border-radius:50%;background:var(--vi);box-shadow:0 0 6px rgba(123,47,255,.8);border:2px solid var(--panel);}
+.ji.open .jdot{background:#fff;}
+.jc{background:var(--card);border:1px solid rgba(123,47,255,.18);border-radius:12px;overflow:hidden;}
+.jh{display:flex;align-items:center;gap:9px;padding:11px 13px;cursor:pointer;user-select:none;}
+.jch{font-size:.58rem;color:var(--vi);transition:transform .3s;margin-left:auto;opacity:.7;}
+.ji.open .jch{transform:rotate(180deg);}
+.jm{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0;}
+.jd{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--dim);}
+.jdr{font-size:.78rem;color:rgba(232,244,255,.75);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.jsc{font-family:'Orbitron',monospace;font-size:.63rem;color:var(--go);white-space:nowrap;}
+.jbm{display:flex;gap:3px;flex-shrink:0;}
+.mb{width:19px;height:19px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:.4rem;font-weight:900;}
+.jb{display:none;padding:0 13px 14px;border-top:1px solid rgba(123,47,255,.12);}
+.ji.open .jb{display:block;animation:fi .3s ease;}
+.jeg{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:12px 0;}
+@media(max-width:460px){.jeg{grid-template-columns:1fr;}}
+.jeb{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;padding:8px 0;}
+.jei{font-size:.8rem;line-height:1.85;color:rgba(232,244,255,.8);font-weight:300;margin-top:10px;padding-top:10px;border-top:1px solid rgba(0,212,255,.07);}
+.jeil{font-family:'Share Tech Mono',monospace;font-size:.55rem;color:var(--az);letter-spacing:.15em;margin-bottom:6px;opacity:.7;}
+.sn{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--dim);margin-top:9px;display:flex;align-items:center;gap:5px;}
+.snd{width:5px;height:5px;border-radius:50%;background:var(--gr);box-shadow:0 0 5px rgba(0,255,136,.6);}
+.da{animation:fi .5s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.ld span{animation:lb2 1.2s step-end infinite;}.ld span:nth-child(2){animation-delay:.2s;}.ld span:nth-child(3){animation-delay:.4s;}
+@keyframes lb2{50%{opacity:.1;}}
+
+/* ── 하단 동의 배너 ── */
+.consent-banner{
+  position:fixed;bottom:0;left:0;right:0;z-index:9000;
+  background:rgba(6,13,31,0.97);
+  border-top:1px solid rgba(0,212,255,0.25);
+  backdrop-filter:blur(12px);
+  padding:14px 20px;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  box-shadow:0 -4px 30px rgba(0,0,0,0.5);
+  animation:bannerUp .4s cubic-bezier(.22,1,.36,1);
+}
+@keyframes bannerUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.consent-banner.hide{animation:bannerDown .35s ease forwards;}
+@keyframes bannerDown{to{transform:translateY(110%);}}
+.consent-icon{font-size:1.3rem;flex-shrink:0;}
+.consent-text{flex:1;min-width:220px;font-size:0.78rem;color:rgba(232,244,255,0.78);line-height:1.65;}
+.consent-text a{color:var(--az);text-decoration:underline;cursor:pointer;}
+.consent-text .cp-note{display:block;font-size:0.68rem;color:var(--dim);margin-top:4px;}
+.consent-btns{display:flex;gap:8px;flex-shrink:0;}
+.consent-btn-agree{
+  padding:9px 22px;border-radius:8px;
+  background:var(--az);color:#020510;
+  font-family:'Orbitron',monospace;font-size:0.72rem;font-weight:700;
+  letter-spacing:0.08em;cursor:pointer;border:none;
+  transition:all .2s;white-space:nowrap;
+}
+.consent-btn-agree:hover{background:#fff;box-shadow:0 0 16px rgba(0,212,255,0.5);}
+.consent-btn-detail{
+  padding:9px 16px;border-radius:8px;
+  background:transparent;color:var(--az);
+  font-family:'Share Tech Mono',monospace;font-size:0.68rem;
+  letter-spacing:0.06em;cursor:pointer;
+  border:1px solid rgba(0,212,255,0.35);
+  white-space:nowrap;transition:all .2s;
+}
+.consent-btn-detail:hover{background:rgba(0,212,255,0.08);}
+
+/* ── 푸터 ── */
+.footer{
+  text-align:center;padding:28px 16px 100px;
+  border-top:1px solid rgba(0,212,255,0.08);
+  margin-top:20px;
+}
+.footer-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:10px;}
+.footer-link{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--dim);letter-spacing:0.1em;cursor:pointer;text-decoration:underline;}
+.footer-link:hover{color:var(--az);}
+.footer-copy{font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:var(--dim);opacity:0.6;letter-spacing:0.08em;}
+.footer-coupang{font-size:0.62rem;color:var(--dim);margin-top:6px;opacity:0.7;}
+
+/* ── 약관 모달 ── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:9100;
+  background:rgba(2,5,16,0.88);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  animation:fi .25s ease;
+}
+.modal-box{
+  background:var(--panel);border:1px solid rgba(0,212,255,0.25);
+  border-radius:16px;width:100%;max-width:560px;max-height:80vh;
+  overflow:hidden;display:flex;flex-direction:column;
+  box-shadow:0 0 60px rgba(0,0,0,0.6);
+}
+.modal-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;border-bottom:1px solid rgba(0,212,255,0.15);
+  flex-shrink:0;
+}
+.modal-title{font-family:'Orbitron',monospace;font-size:0.88rem;font-weight:700;color:var(--az);}
+.modal-close{background:transparent;border:1px solid rgba(0,212,255,0.2);border-radius:6px;color:var(--dim);font-size:0.8rem;padding:4px 10px;cursor:pointer;transition:all .2s;}
+.modal-close:hover{border-color:var(--az);color:var(--az);}
+.modal-tabs{display:flex;border-bottom:1px solid rgba(0,212,255,0.12);flex-shrink:0;}
+.modal-tab{flex:1;padding:10px;text-align:center;cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;color:var(--dim);border-bottom:2px solid transparent;transition:all .2s;}
+.modal-tab.act{color:var(--az);border-bottom-color:var(--az);}
+.modal-body{padding:20px;overflow-y:auto;flex:1;font-size:0.83rem;line-height:1.8;color:rgba(232,244,255,0.82);}
+.modal-body h3{font-size:0.85rem;color:var(--az);margin:16px 0 8px;font-family:'Share Tech Mono',monospace;letter-spacing:0.1em;}
+.modal-body h3::before{content:"◆ ";opacity:0.6;font-size:0.65rem;}
+.modal-body p{margin-bottom:10px;}
+.modal-body ul{padding-left:18px;margin-bottom:10px;}
+.modal-body li{margin-bottom:4px;}
+.modal-body .warn-box{background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.25);border-radius:8px;padding:12px 14px;margin:10px 0;}
+.modal-footer{padding:14px 20px;border-top:1px solid rgba(0,212,255,0.12);display:flex;justify-content:flex-end;flex-shrink:0;}
+.modal-agree-btn{padding:10px 28px;border-radius:8px;background:var(--az);color:#020510;font-family:'Orbitron',monospace;font-size:0.75rem;font-weight:700;letter-spacing:0.1em;cursor:pointer;border:none;}
+
+/* ── 오행 배너 ── */
+.oh-banner{
+  border-radius:12px;padding:14px 16px;margin-bottom:14px;
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;gap:14px;
+}
+.oh-banner::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 0% 50%,var(--oh-glow,.2),transparent 70%);
+  pointer-events:none;}
+.oh-orb{
+  width:52px;height:52px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;
+  border:2px solid var(--oh-c,#ffd700);
+  box-shadow:0 0 16px var(--oh-glow,rgba(255,215,0,.4));
+  background:rgba(0,0,0,.3);
+}
+.oh-body{flex:1;}
+.oh-label{font-family:'Share Tech Mono',monospace;font-size:.55rem;
+  color:var(--oh-c,#ffd700);letter-spacing:.18em;opacity:.75;margin-bottom:3px;}
+.oh-name{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;
+  color:var(--oh-c,#ffd700);margin-bottom:4px;}
+.oh-reason{font-size:.79rem;line-height:1.65;color:rgba(232,244,255,.78);font-weight:300;}
+.oh-cycle{
+  margin-top:12px;padding-top:10px;
+  border-top:1px solid rgba(255,255,255,.06);
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+}
+.oh-cycle-label{font-family:'Share Tech Mono',monospace;font-size:.55rem;
+  color:var(--dim);letter-spacing:.1em;}
+.oh-pill{
+  padding:3px 9px;border-radius:12px;
+  font-family:'Share Tech Mono',monospace;font-size:.58rem;
+  letter-spacing:.06em;
+}
+.oh-pill.main{background:var(--oh-c,#ffd700);color:#020510;font-weight:700;}
+.oh-pill.sang{background:rgba(255,255,255,.08);color:rgba(232,244,255,.7);
+  border:1px solid rgba(255,255,255,.12);}
+.oh-pill.arr{color:var(--dim);font-size:.52rem;}
+
+/* ══════════════════════════════════════
+   당첨 확인 & 축하 효과
+══════════════════════════════════════ */
+
+/* 당첨 확인 입력 */
+.win-check{margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.06);}
+.win-check-title{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--dim);letter-spacing:.12em;margin-bottom:8px;}
+.win-input-row{display:flex;gap:6px;flex-wrap:wrap;}
+.win-num-input{width:46px;height:38px;background:var(--bg);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:var(--tx);font-family:'Orbitron',monospace;font-size:.8rem;font-weight:700;text-align:center;outline:none;transition:border-color .2s;}
+.win-num-input:focus{border-color:var(--go);}
+.win-bonus-input{width:46px;height:38px;background:var(--bg);border:2px dashed rgba(255,215,0,.3);border-radius:8px;color:var(--go);font-family:'Orbitron',monospace;font-size:.8rem;font-weight:700;text-align:center;outline:none;}
+.win-bonus-label{font-family:'Share Tech Mono',monospace;font-size:.5rem;color:var(--dim);letter-spacing:.08em;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;}
+.win-btn{padding:0 14px;height:38px;background:transparent;border:1px solid var(--go);border-radius:8px;color:var(--go);font-family:'Orbitron',monospace;font-size:.6rem;font-weight:700;letter-spacing:.08em;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.win-btn:hover{background:var(--go);color:#020510;}
+
+/* 당첨 결과 뱃지 */
+.win-result{margin-top:10px;border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;animation:fi .4s ease;}
+.win-result.r1{background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,107,0,.1));border:2px solid var(--go);box-shadow:0 0 24px rgba(255,215,0,.3);}
+.win-result.r2{background:linear-gradient(135deg,rgba(192,192,192,.12),rgba(0,212,255,.08));border:2px solid #c0c0ff;box-shadow:0 0 16px rgba(192,192,255,.25);}
+.win-result.r3{background:rgba(255,107,0,.08);border:1px solid rgba(255,107,0,.35);}
+.win-result.r4,.win-result.r5{background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.2);}
+.win-result.none{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);}
+.win-result-icon{font-size:1.6rem;flex-shrink:0;}
+.win-result-text{flex:1;}
+.win-result-grade{font-family:'Orbitron',monospace;font-size:.9rem;font-weight:900;}
+.win-result.r1 .win-result-grade{color:var(--go);}
+.win-result.r2 .win-result-grade{color:#c8c8ff;}
+.win-result.r3 .win-result-grade{color:#ff8c42;}
+.win-result.r4 .win-result-grade,.win-result.r5 .win-result-grade{color:var(--az);}
+.win-result-desc{font-size:.75rem;color:rgba(232,244,255,.7);margin-top:2px;}
+.win-matched{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap;}
+.win-ball-hit{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:.6rem;font-weight:900;border:2px solid var(--go);box-shadow:0 0 8px rgba(255,215,0,.5);}
+.win-ball-miss{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:.6rem;font-weight:900;background:rgba(255,255,255,.06);color:var(--dim);border:1px solid rgba(255,255,255,.1);}
+
+/* 저널 — 당첨 카드 특수 스타일 */
+.ji.winner-1 .jc{border-color:rgba(255,215,0,.7)!important;box-shadow:0 0 30px rgba(255,215,0,.25),0 0 60px rgba(255,215,0,.1);}
+.ji.winner-1 .jdot{background:var(--go)!important;box-shadow:0 0 12px rgba(255,215,0,.9)!important;width:12px!important;height:12px!important;left:-18px!important;}
+.ji.winner-2 .jc{border-color:rgba(192,192,255,.5)!important;box-shadow:0 0 20px rgba(192,192,255,.2);}
+.ji.winner-2 .jdot{background:#c8c8ff!important;box-shadow:0 0 10px rgba(200,200,255,.8)!important;}
+.ji.winner-3 .jc{border-color:rgba(255,107,0,.45)!important;box-shadow:0 0 14px rgba(255,107,0,.15);}
+.ji.winner-3 .jdot{background:#ff8c42!important;}
+
+/* 핀 뱃지 */
+.pin-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 10px;border-radius:12px;
+  font-family:'Share Tech Mono',monospace;font-size:.52rem;
+  letter-spacing:.08em;font-weight:700;
+  margin-bottom:6px;
+}
+.pin-badge.g1{background:linear-gradient(90deg,rgba(255,215,0,.2),rgba(255,107,0,.1));color:var(--go);border:1px solid rgba(255,215,0,.4);}
+.pin-badge.g2{background:rgba(192,192,255,.1);color:#c8c8ff;border:1px solid rgba(192,192,255,.3);}
+.pin-badge.g3{background:rgba(255,107,0,.1);color:#ff8c42;border:1px solid rgba(255,107,0,.3);}
+
+/* 축하 오버레이 (1·2등 당첨 시) */
+.confetti-overlay{
+  position:fixed;inset:0;z-index:9500;pointer-events:none;
+  overflow:hidden;
+}
+.confetti-msg{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  text-align:center;
+  animation:confettiPop .6s cubic-bezier(.34,1.56,.64,1) forwards;
+  background:rgba(6,13,31,.92);border:2px solid var(--go);
+  border-radius:20px;padding:28px 40px;
+  box-shadow:0 0 60px rgba(255,215,0,.4);
+}
+@keyframes confettiPop{0%{opacity:0;transform:translate(-50%,-50%) scale(.3);}100%{opacity:1;transform:translate(-50%,-50%) scale(1);}}
+.confetti-grade{font-family:'Orbitron',monospace;font-size:2rem;font-weight:900;color:var(--go);
+  text-shadow:0 0 20px rgba(255,215,0,.8);}
+.confetti-sub{font-size:.85rem;color:rgba(232,244,255,.8);margin-top:8px;}
+.confetti-close{margin-top:18px;padding:9px 24px;background:var(--go);color:#020510;
+  border:none;border-radius:8px;font-family:'Orbitron',monospace;font-size:.72rem;
+  font-weight:700;cursor:pointer;}
+.c-particle{position:absolute;width:8px;height:8px;border-radius:2px;
+  animation:cFall linear forwards;}
+@keyframes cFall{0%{transform:translateY(-20px) rotate(0deg);opacity:1;}
+  100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}
+
+/* ══════════════════════════════════════
+   PWA 앱 설치 배너
+══════════════════════════════════════ */
+.pwa-banner{
+  position:fixed;bottom:0;left:0;right:0;z-index:9200;
+  background:linear-gradient(135deg,#0a1528,#060d1f);
+  border-top:1px solid rgba(0,212,255,0.35);
+  padding:14px 18px;
+  display:flex;align-items:center;gap:14px;
+  box-shadow:0 -6px 30px rgba(0,0,0,0.6);
+  animation:pwaUp .45s cubic-bezier(.22,1,.36,1);
+}
+@keyframes pwaUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.pwa-banner.hide{animation:pwaDown .3s ease forwards;}
+@keyframes pwaDown{to{transform:translateY(110%);}}
+
+.pwa-icon{
+  width:48px;height:48px;border-radius:12px;flex-shrink:0;
+  background:linear-gradient(135deg,#020510,#0a1528);
+  border:1.5px solid rgba(0,212,255,0.4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;
+  box-shadow:0 0 14px rgba(0,212,255,0.3);
+}
+.pwa-text{flex:1;}
+.pwa-title{
+  font-family:'Orbitron',monospace;font-size:.82rem;font-weight:700;
+  color:var(--tx);margin-bottom:3px;
+}
+.pwa-desc{
+  font-family:'Share Tech Mono',monospace;font-size:.6rem;
+  color:var(--dim);letter-spacing:.04em;line-height:1.5;
+}
+.pwa-desc span{color:var(--az);}
+.pwa-btns{display:flex;gap:8px;flex-shrink:0;}
+.pwa-btn-install{
+  padding:9px 16px;border-radius:8px;
+  background:var(--az);color:#020510;
+  font-family:'Orbitron',monospace;font-size:.65rem;font-weight:700;
+  letter-spacing:.06em;cursor:pointer;border:none;
+  white-space:nowrap;transition:all .2s;
+  box-shadow:0 0 14px rgba(0,212,255,0.4);
+}
+.pwa-btn-install:hover{background:#fff;box-shadow:0 0 20px rgba(0,212,255,0.6);}
+.pwa-btn-close{
+  padding:9px 12px;border-radius:8px;
+  background:transparent;color:var(--dim);
+  font-size:.75rem;cursor:pointer;
+  border:1px solid rgba(255,255,255,.1);
+  transition:all .2s;
+}
+.pwa-btn-close:hover{color:var(--tx);border-color:rgba(255,255,255,.3);}
+
+/* 헤더 내 설치 버튼 (작은 버튼) */
+.pwa-header-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 14px;border-radius:20px;
+  background:rgba(0,212,255,0.08);
+  border:1px solid rgba(0,212,255,0.3);
+  color:var(--az);font-family:'Share Tech Mono',monospace;
+  font-size:.6rem;letter-spacing:.08em;
+  cursor:pointer;transition:all .2s;margin-top:8px;
+}
+.pwa-header-btn:hover{background:rgba(0,212,255,0.15);border-color:var(--az);}
+.pwa-header-btn .pwa-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--az);animation:pg 1.5s ease-in-out infinite;
+}
+
+/* iOS 안내 모달 */
+.ios-modal{
+  position:fixed;inset:0;z-index:9300;
+  background:rgba(2,5,16,0.88);backdrop-filter:blur(8px);
+  display:flex;align-items:flex-end;justify-content:center;
+  padding:20px;
+}
+.ios-box{
+  background:var(--panel);border:1px solid rgba(0,212,255,0.3);
+  border-radius:20px;width:100%;max-width:480px;
+  padding:24px;position:relative;
+  box-shadow:0 -4px 40px rgba(0,0,0,0.5);
+}
+.ios-title{
+  font-family:'Orbitron',monospace;font-size:.95rem;font-weight:700;
+  color:var(--az);text-align:center;margin-bottom:6px;
+}
+.ios-sub{
+  font-size:.8rem;color:var(--dim);text-align:center;
+  margin-bottom:20px;
+}
+.ios-steps{display:flex;flex-direction:column;gap:12px;margin-bottom:20px;}
+.ios-step{
+  display:flex;align-items:flex-start;gap:12px;
+  background:var(--card);border-radius:10px;padding:12px;
+}
+.ios-num{
+  width:26px;height:26px;border-radius:50%;flex-shrink:0;
+  background:var(--az);color:#020510;
+  font-family:'Orbitron',monospace;font-size:.7rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+.ios-step-text{font-size:.82rem;line-height:1.6;color:var(--tx);}
+.ios-step-text b{color:var(--az);}
+.ios-step-icon{font-size:1.1rem;flex-shrink:0;}
+.ios-close{
+  width:100%;padding:12px;border-radius:10px;
+  background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.25);
+  color:var(--az);font-family:'Share Tech Mono',monospace;
+  font-size:.72rem;letter-spacing:.08em;cursor:pointer;
+}
+/* ── 가독성 개선 패치 (50-60대 최적화) ── */
+:root { --dim: #8ab0cc; }
+
+/* 입력창 */
+.ta { font-size: 1.05rem; line-height: 1.85; padding: 14px; min-height: 130px; }
+.ta::placeholder { font-size: 1rem; }
+
+/* 분석 버튼 */
+.btn { font-size: 0.95rem; padding: 16px; letter-spacing: 0.1em; }
+
+/* 섹션 라벨 */
+.pl { font-size: 0.68rem; margin-bottom: 14px; }
+
+/* AI 해몽 텍스트 */
+.it { font-size: 1rem; line-height: 2.05; }
+
+/* 번호 볼 크기 */
+.ball { width: 58px; height: 58px; font-size: 1.05rem; }
+
+/* 번호 풀이 */
+.ne { padding: 14px 16px; margin-bottom: 12px; }
+.nb { width: 36px; height: 36px; font-size: 0.85rem; }
+.nk { font-size: 0.75rem; letter-spacing: 0.08em; }
+.nr { font-size: 0.95rem; line-height: 1.95; color: rgba(232,244,255,.92); }
+
+/* 오행 배너 */
+.oh-reason { font-size: 0.92rem; line-height: 1.85; color: rgba(232,244,255,.9); }
+.oh-name { font-size: 1.1rem; }
+.oh-pill { font-size: 0.68rem; padding: 4px 12px; }
+
+/* 운세 점수 */
+.gn { font-size: 0.75rem; }
+.gv { font-size: 1.05rem; }
+.gtr { height: 9px; }
+
+/* 오류 메시지 */
+.et { font-size: 0.8rem; padding: 10px 14px; }
+
+/* 패널 여백 */
+.p { padding: 20px; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useRef}=React;
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   쿠팡 파트너스 설정
+   partners.coupang.com → [링크 생성] 메뉴에서 확인
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+const COUPANG_TRACKING = "AF1731928"; // ← 본인 추적코드로 교체
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   상품 딥링크 가이드:
+   url 필드 → partners.coupang.com에서 생성한 단축 URL 입력
+             (예: "https://link.coupang.com/a/XXXXXXX")
+   url이 비어있으면 검색 URL + trackingCode로 자동 대체됩니다.
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+const CDB={
+  water:{l:"수(Water) 에너지 처방",c:"#7b6fff",g:"rgba(123,111,255,0.35)",i:"🌊",boost:{r:"물꿈은 재물과 기회의 흐름을 예고합니다. 물의 기운을 집 안으로 끌어들여 행운의 채널을 열어두세요.",items:[{n:"수정 풍수 분수대",t:"행운강화",e:"⛲",q:"실내 수정 풍수 분수대",url:""},{n:"청금석 행운 팔찌",t:"재물운↑",e:"💙",q:"청금석 팔찌 행운",url:""},{n:"파란 연꽃 풍수 소품",t:"기운상승",e:"🪷",q:"연꽃 풍수 소품",url:""}]},heal:{r:"물이 범람하는 두려운 꿈은 감정적 혼란의 신호일 수 있습니다. 마음을 차분히 정화하세요.",items:[{n:"라벤더 아로마 디퓨저",t:"마음안정",e:"🕯️",q:"라벤더 디퓨저 안정",url:""},{n:"캐모마일 허브티",t:"힐링차",e:"🍵",q:"캐모마일 허브티 힐링",url:""},{n:"히말라야 입욕제",t:"정화목욕",e:"🛁",q:"히말라야 핑크솔트 입욕제",url:""}]}},
+  fire:{l:"화(Fire) 에너지 처방",c:"#ff6b00",g:"rgba(255,107,0,0.35)",i:"🔥",boost:{r:"불꿈은 강렬한 변화와 도약의 신호입니다. 뜨거운 에너지를 현실 행동력으로 극대화하세요.",items:[{n:"붉은 홍옥 행운 스톤",t:"에너지↑",e:"🔴",q:"홍옥 행운 스톤",url:""},{n:"태양 황금 부적",t:"사업운↑",e:"☀️",q:"황금 부적 사업운",url:""},{n:"붉은 복주머니 소품",t:"재물강화",e:"👝",q:"복주머니 풍수",url:""}]},heal:{r:"강렬한 불꿈 후에는 마음이 불안할 수 있습니다. 감정을 부드럽게 다스려 주세요.",items:[{n:"로즈우드 명상 인센스",t:"마음진정",e:"🪔",q:"로즈우드 인센스 명상",url:""},{n:"냉감 쿨링 수면 베개",t:"열식힘",e:"❄️",q:"쿨링 수면 베개",url:""},{n:"마그네슘 영양제",t:"신경안정",e:"💊",q:"마그네슘 신경안정",url:""}]}},
+  gold:{l:"금(Gold) 에너지 처방",c:"#ffd700",g:"rgba(255,215,0,0.35)",i:"✨",boost:{r:"금·보석 꿈은 최상급 재물운의 신호입니다. 황금 기운을 집 안으로 불러들여 재물의 문을 여세요.",items:[{n:"황금 두꺼비 풍수 소품",t:"재물최강",e:"🐸",q:"황금두꺼비 풍수",url:""},{n:"시트린 황수정 원석",t:"부의상징",e:"💛",q:"시트린 황수정",url:""},{n:"금색 복주머니 장식",t:"행운강화",e:"🏺",q:"금색 복주머니",url:""}]},heal:{r:"귀중한 것을 받거나 잃는 꿈은 감사나 아쉬움을 남깁니다. 따뜻하게 마음을 감싸세요.",items:[{n:"바닐라 캔들 세트",t:"마음위로",e:"🕯️",q:"바닐라 캔들 위로",url:""},{n:"국화·대추차 선물세트",t:"감사선물",e:"🌸",q:"국화 꽃차 선물세트",url:""},{n:"플리스 무릎담요",t:"포근위로",e:"🧣",q:"플리스 무릎담요",url:""}]}},
+  sky:{l:"천(Sky) 에너지 처방",c:"#00d4ff",g:"rgba(0,212,255,0.35)",i:"🌌",boost:{r:"하늘을 나는 꿈은 한계 돌파와 높은 성취를 예고합니다. 집중력과 직관력을 극대화하세요.",items:[{n:"아메시스트 크리스탈",t:"직관↑",e:"💜",q:"아메시스트 크리스탈",url:""},{n:"백수정 오르곤 피라미드",t:"에너지정화",e:"🔮",q:"백수정 오르곤 피라미드",url:""},{n:"라피스라줄리 팔찌",t:"성취운↑",e:"🌀",q:"라피스라줄리 팔찌",url:""}]},heal:{r:"높이 날다 추락한 꿈은 현실의 압박을 반영합니다. 잠시 내려와 마음을 고요히 쉬어 주세요.",items:[{n:"명상 쿠션 + 싱잉볼",t:"마음고요",e:"🧘",q:"명상쿠션 싱잉볼",url:""},{n:"수면 영양제",t:"깊은수면",e:"😴",q:"수면 영양제 멜라토닌",url:""},{n:"릴렉싱 바스밤",t:"긴장완화",e:"🛁",q:"라벤더 바스밤 릴렉싱",url:""}]}},
+  earth:{l:"지(Earth) 에너지 처방",c:"#00ff88",g:"rgba(0,255,136,0.35)",i:"🌿",boost:{r:"자연·대지의 꿈은 뿌리 깊은 생명력과 성장을 예고합니다. 대지의 기운을 받으세요.",items:[{n:"옥 그린 행운석",t:"생명력↑",e:"💚",q:"옥 행운석",url:""},{n:"돈나무 화분 세트",t:"번창기원",e:"🪴",q:"돈나무 행운목",url:""},{n:"클로버 행운 소품",t:"행운강화",e:"🍀",q:"클로버 행운 소품",url:""}]},heal:{r:"숲이나 땅이 나오는 꿈 후에는 자연이 전하는 치유의 메시지를 받아들이세요.",items:[{n:"편백나무 피톤치드",t:"자연치유",e:"🌲",q:"편백나무 피톤치드",url:""},{n:"허브 족욕제 세트",t:"피로회복",e:"🌿",q:"유기농 허브 족욕제",url:""},{n:"어싱 접지 매트",t:"그라운딩",e:"🦶",q:"어싱 접지 매트",url:""}]}},
+  default:{l:"기(氣) 에너지 처방",c:"#7b2fff",g:"rgba(123,47,255,0.35)",i:"🔮",boost:{r:"꿈이 보내는 신호를 더 선명하게 받아들이고, 잠재된 행운의 기운을 현실로 끌어내세요.",items:[{n:"자수정 오르곤 피라미드",t:"기운강화",e:"🔺",q:"자수정 오르곤 피라미드",url:""},{n:"풍수 오행 소품 세트",t:"오행균형",e:"🏮",q:"풍수 오행 소품",url:""},{n:"타로카드 + 수정",t:"직관향상",e:"🃏",q:"타로카드 수정볼",url:""}]},heal:{r:"복잡한 꿈 후에는 마음이 어수선할 수 있습니다. 내면의 혼란을 고요한 통찰로 정리하세요.",items:[{n:"화이트 세이지 번들",t:"공간정화",e:"🌿",q:"화이트 세이지 번들",url:""},{n:"감사일기 다이어리",t:"마음정리",e:"📓",q:"감사일기 마음챙김",url:""},{n:"허브티 선물세트",t:"마음위로",e:"☕",q:"허브티 선물세트",url:""}]}},
+};
+
+const SAMPLES=[
+  {id:1,dreamText:"강에서 큰 잉어를 잡았는데 갑자기 용이 되어 하늘로 날아갔어요",date:"03.18 02:14",wealth:85,love:55,success:91,prob:78,
+   numbers:[1,6,21,3,8,33],
+   reasons:[
+     {keyword:"水·1번",reason:"1은 水의 기본수입니다. 강물이 흐르는 꿈의 시작점에서 水의 기운이 활성화되었으며, 재물의 흐름이 열리는 첫 번째 수리입니다."},
+     {keyword:"水·6번",reason:"6은 水의 기본수 쌍입니다. 하늘의 물(天水)을 상징하며, 꿈속 강이 하늘로 연결되는 장면에서 이 기운이 강하게 발현됩니다."},
+     {keyword:"水순환·21번",reason:"21은 水의 순환수(1+20)입니다. 잉어가 용으로 변하는 극적 상승이 水기운의 최고조를 나타내며 재물 대박의 신호입니다."},
+     {keyword:"木상생·3번",reason:"3은 水生木의 상생수입니다. 물이 나무를 키우듯 꿈의 에너지가 성장과 생명력으로 이어지며, 새로운 기회가 싹트는 수리입니다."},
+     {keyword:"木상생·8번",reason:"8은 木의 기본수입니다. 용이 하늘로 비상하는 장면의 木기운이 8번에 담겼으며, 도약과 성취의 힘을 상징합니다."},
+     {keyword:"木순환·33번",reason:"33은 木의 순환수(3×11)입니다. 꿈의 완전한 상승 에너지가 33번으로 마무리되며, 水生木의 상생 사이클이 완성됩니다."},
+   ],
+   interp:"용이 된 잉어는 극적인 신분 상승과 재물의 대폭발을 상징합니다. 강은 기회의 흐름이며 하늘을 나는 장면은 현실의 속박을 벗어나는 해방감을 나타냅니다.",
+   artType:"water",
+   ohaeng_info:{main:"水(수)",reason:"강물과 잉어가 등장하는 꿈은 오행에서 水(수)로 분류됩니다. 물은 재물과 지혜의 흐름을 상징하며, 용으로 변하는 장면에서 水의 기운이 최고조에 달합니다."}
+  },
+  {id:2,dreamText:"돌아가신 할머니가 금반지를 주면서 환하게 웃고 계셨어요",date:"03.10 04:07",wealth:95,love:42,success:70,prob:88,
+   numbers:[4,9,44,1,6,19],
+   reasons:[
+     {keyword:"金·4번",reason:"4는 金의 기본수입니다. 금반지의 황금 기운이 4번에 직접적으로 배속되며, 서방 金기운의 결실과 재물의 완성을 상징합니다."},
+     {keyword:"金·9번",reason:"9는 金의 기본수 쌍입니다. 완성수 9는 꿈에서 받은 금반지가 의미하는 최고의 성취와 결실을 수리로 표현합니다."},
+     {keyword:"金순환·44번",reason:"44는 金의 순환수(4×11)입니다. 조상이 전하는 재물운의 완전한 봉인이며, 金기운이 최고조로 집약된 번호입니다."},
+     {keyword:"水상생·1번",reason:"1은 金生水의 상생수입니다. 금속에서 물이 흘러나오듯 재물이 지속적으로 순환하는 흐름을 만들어주는 수리입니다."},
+     {keyword:"水상생·6번",reason:"6은 水의 기본수로 金生水 상생의 완성입니다. 할머니의 따뜻한 미소가 담긴 하늘의 물기운(天水)이 복을 전달합니다."},
+     {keyword:"金순환·19번",reason:"19는 金의 순환수(4+15)입니다. 현몽의 신성함과 금의 기운이 결합하여 19번에 특별한 길운이 깃들어 있습니다."},
+   ],
+   interp:"조상이 귀한 물건을 건네는 꿈은 최고 등급의 길몽입니다. 금반지는 부와 영속성을 상징하며 환한 웃음은 축복의 메시지입니다.",
+   artType:"gold",
+   ohaeng_info:{main:"金(금)",reason:"금반지가 등장하는 꿈은 오행에서 金(금)으로 분류됩니다. 금속과 보석은 서방 金기운의 상징이며, 조상의 현몽은 金의 결실 에너지가 현실로 전달되는 최고의 신호입니다."}
+  },
+];
+
+const BC=["b1","b2","b3","b4","b5","b6"];
+const MS=[{background:"#ff6b00",color:"#fff"},{background:"#00d4ff",color:"#001a2c"},{background:"#7b2fff",color:"#fff"},{background:"#ffd700",color:"#1a0a00"},{background:"#ff2d78",color:"#fff"},{background:"#00ff88",color:"#001a10"}];
+const NC=["#ff6b00","#00d4ff","#7b2fff","#ffd700","#ff2d78","#00ff88"];
+
+/* ── 오행 수리학 데이터 ── */
+const OHAENG={
+  water:{
+    hanja:"水",name:"수(水)",emoji:"🌊",
+    color:"#7b9fff",glow:"rgba(123,159,255,0.35)",
+    numbers:"1·6",cycle:"11·16·21·26·31·36·41",
+    sang:"木(목)",
+    sangNumbers:"3·8",
+    desc:"水는 지혜·흐름·재물의 기운입니다. 기본수 1과 6은 하늘과 땅의 물을 상징하며, 이 수열은 기회가 물처럼 자연스럽게 흘러드는 길을 열어줍니다.",
+    cycle_info:"水生木 — 물은 나무를 키웁니다. 상생수 木(3·8)을 함께 품어 생명력을 더합니다."
+  },
+  fire:{
+    hanja:"火",name:"화(火)",emoji:"🔥",
+    color:"#ff7b4f",glow:"rgba(255,123,79,0.35)",
+    numbers:"2·7",cycle:"12·17·22·27·32·37·42",
+    sang:"土(토)",
+    sangNumbers:"5·10",
+    desc:"火는 열정·변화·성공의 기운입니다. 기본수 2와 7은 음양의 불꽃을 상징하며, 강렬한 변화와 새로운 도약의 에너지를 숫자 안에 담습니다.",
+    cycle_info:"火生土 — 불은 재(灰)가 되어 흙을 풍요롭게 합니다. 상생수 土(5·10)로 안정을 더합니다."
+  },
+  gold:{
+    hanja:"金",name:"금(金)",emoji:"✨",
+    color:"#ffd700",glow:"rgba(255,215,0,0.35)",
+    numbers:"4·9",cycle:"14·19·24·29·34·39·44",
+    sang:"水(수)",
+    sangNumbers:"1·6",
+    desc:"金은 재물·결실·견고함의 기운입니다. 기본수 4와 9는 서방(西方)의 금기(金氣)를 담으며, 노력의 결실이 황금으로 돌아오는 수리입니다.",
+    cycle_info:"金生水 — 금속에서 물이 흘러나옵니다. 상생수 水(1·6)를 더해 재물의 순환을 완성합니다."
+  },
+  sky:{
+    hanja:"土",name:"토(土)",emoji:"🌌",
+    color:"#c084fc",glow:"rgba(192,132,252,0.35)",
+    numbers:"5·10",cycle:"15·20·25·30·35·40·45",
+    sang:"金(금)",
+    sangNumbers:"4·9",
+    desc:"土는 중심·안정·포용의 기운입니다. 기본수 5와 10은 오행의 중앙에 위치하며, 모든 기운을 품어 균형과 도약의 발판을 만들어줍니다.",
+    cycle_info:"土生金 — 흙 속에서 금이 나옵니다. 상생수 金(4·9)으로 성취의 결실을 맺습니다."
+  },
+  earth:{
+    hanja:"木",name:"목(木)",emoji:"🌿",
+    color:"#4ade80",glow:"rgba(74,222,128,0.35)",
+    numbers:"3·8",cycle:"13·18·23·28·33·38·43",
+    sang:"火(화)",
+    sangNumbers:"2·7",
+    desc:"木은 생명·성장·새로운 시작의 기운입니다. 기본수 3과 8은 동방(東方)의 목기(木氣)를 담으며, 씨앗이 싹트듯 잠재된 가능성이 현실로 드러나는 수리입니다.",
+    cycle_info:"木生火 — 나무는 불의 연료가 됩니다. 상생수 火(2·7)를 더해 열정과 추진력을 높입니다."
+  },
+  default:{
+    hanja:"氣",name:"기(氣)",emoji:"🔮",
+    color:"#a78bfa",glow:"rgba(167,139,250,0.35)",
+    numbers:"1·2·3·4·5",cycle:"오행 균형",
+    sang:"오행 순환",
+    sangNumbers:"균형 선택",
+    desc:"오행이 조화롭게 순환하는 꿈입니다. 다섯 가지 기운이 모두 활성화되어 어느 하나의 오행에 치우치지 않고 균형 잡힌 행운의 기운이 흐릅니다.",
+    cycle_info:"오행상생 — 水生木·木生火·火生土·土生金·金生水의 완전한 순환을 품습니다."
+  },
+};
+
+/* ── 오행 배너 컴포넌트 ── */
+function OhaengBanner({artType, ohaengInfo}){
+  const oh=OHAENG[artType]||OHAENG.default;
+  const reason=ohaengInfo?.reason||oh.desc;
+  return(
+    <div className="oh-banner p" style={{"--oh-c":oh.color,"--oh-glow":oh.glow,
+      background:`linear-gradient(135deg,rgba(6,13,31,0.95) 0%,rgba(6,13,31,0.8) 100%)`,
+      border:`1px solid ${oh.color}44`}}>
+      <div className="oh-orb" style={{"--oh-c":oh.color,"--oh-glow":oh.glow}}>
+        {oh.emoji}
+      </div>
+      <div className="oh-body">
+        <div className="oh-label">// 주오행 · 오행수리학 분석</div>
+        <div className="oh-name" style={{color:oh.color}}>
+          {oh.hanja} &nbsp;{oh.name}
+          <span style={{fontFamily:"'Share Tech Mono',monospace",fontSize:".62rem",
+            color:oh.color,fontWeight:400,marginLeft:10,opacity:.75}}>
+            기본수 {oh.numbers}
+          </span>
+        </div>
+        <div className="oh-reason">{reason}</div>
+        <div className="oh-cycle">
+          <span className="oh-cycle-label">오행상생</span>
+          <span className="oh-pill main" style={{background:oh.color,color:"#020510"}}>{oh.hanja} {oh.numbers}</span>
+          <span className="oh-pill arr">→ 상생</span>
+          <span className="oh-pill sang">{oh.sang} {oh.sangNumbers}</span>
+          <span className="oh-pill arr">·</span>
+          <span className="oh-pill sang" style={{fontSize:".52rem",opacity:.65}}>순환수 {oh.cycle}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DreamArt({artType="default",seed=42,dreamText=""}){
+  const r=(mn,mx,s)=>{let x=Math.sin(s+1)*10000;return Math.floor((x-Math.floor(x))*(mx-mn)+mn);};
+  const kw=dreamText.toLowerCase();
+  const has=(...w)=>w.some(v=>kw.includes(v));
+  const T={water:{p:"#00d4ff",s:"#0044aa",a:"#7b6fff",bg:"#010a18"},fire:{p:"#ff6b00",s:"#ff2d78",a:"#ffd700",bg:"#110200"},gold:{p:"#ffd700",s:"#ff9900",a:"#00d4ff",bg:"#0d0800"},sky:{p:"#7b2fff",s:"#00d4ff",a:"#00ff88",bg:"#040010"},earth:{p:"#00ff88",s:"#00d4ff",a:"#ffd700",bg:"#001408"},default:{p:"#00d4ff",s:"#7b2fff",a:"#ffd700",bg:"#020510"}};
+  const t=T[artType]||T.default;
+  const special=()=>{
+    if(artType==="water"){const waves=Array.from({length:5},(_,i)=>{const y=28+i*13+r(-4,4,seed+i*7);const pts=Array.from({length:20},(_,j)=>`${j*6} ${y+Math.sin(j*(.08+i*.015)*Math.PI*2+i)*(7+i*2)}`).join(' ');return<polyline key={i} points={pts} fill="none" stroke={i%2===0?t.p:t.a} strokeWidth={.35+i*.12} opacity={.12+i*.1}/>;});const bubs=Array.from({length:10},(_,i)=>({cx:r(5,95,seed+i*11),cy:r(10,90,seed+i*17),r:r(1,4,seed+i*23),op:.07+i*.04}));return<>{waves}{bubs.map((b,i)=><circle key={i} cx={b.cx} cy={b.cy} r={b.r} fill={t.p} opacity={b.op}/>)}{[16,11,7,3].map((rv,i)=><circle key={i} cx="50" cy="55" r={rv} fill="none" stroke={t.p} strokeWidth=".4" opacity={.05+i*.06} strokeDasharray="2 2"/>)}</>;}
+    if(artType==="fire"){const fl=Array.from({length:8},(_,i)=>{const x=10+i*10+r(-3,3,seed+i*3);const h=r(10,26,seed+i*7);const w=r(3,8,seed+i*11);return<polygon key={i} points={`${x} 95,${x-w} ${95-h},${x+w} ${95-h}`} fill={t.p} opacity={.07+i*.05}/>;});const ry=Array.from({length:8},(_,i)=>{const a=(i/8)*Math.PI*2;return<line key={i} x1={50+Math.cos(a)*7} y1={50+Math.sin(a)*7} x2={50+Math.cos(a)*38} y2={50+Math.sin(a)*38} stroke={t.a} strokeWidth=".35" opacity=".15"/>;});return<>{fl}{ry}<circle cx="50" cy="50" r="6" fill={t.p} opacity=".16"/><circle cx="50" cy="50" r="3" fill={t.a} opacity=".3"/></>;}
+    if(artType==="gold"){const gems=Array.from({length:8},(_,i)=>{const x=r(10,90,seed+i*13),y=r(10,90,seed+i*17),s=r(4,9,seed+i*7);return<polygon key={i} points={`${x} ${y-s},${x+s} ${y},${x} ${y+s},${x-s} ${y}`} fill="none" stroke={t.p} strokeWidth=".45" opacity={.09+i*.05}/>;});const sp=Array.from({length:14},(_,i)=>({x:r(5,95,seed+i*11),y:r(5,95,seed+i*19)}));const star=Array.from({length:8},(_,i)=>{const a=(i/8)*Math.PI*2,ro=i%2===0?14:6;return`${50+Math.cos(a)*ro} ${50+Math.sin(a)*ro}`;}).join(' ');return<>{gems}{sp.map((s,i)=><circle key={i} cx={s.x} cy={s.y} r=".7" fill={t.p} opacity={.18+i*.02}/>)}<polygon points={star} fill="none" stroke={t.p} strokeWidth=".45" opacity=".28"/><circle cx="50" cy="50" r="4" fill={t.a} opacity=".28"/></>;}
+    if(artType==="sky"){const ri=Array.from({length:10},(_,i)=>{const x=5+i*10+r(-3,3,seed+i*3);return<line key={i} x1={x} y1={r(45,88,seed+i*7)} x2={x+r(-4,4,seed+i*11)} y2="10" stroke={t.p} strokeWidth=".35" opacity={.07+i*.04} strokeDasharray="3 2"/>;});const cl=Array.from({length:4},(_,i)=>({cx:r(15,85,seed+i*13),cy:r(12,48,seed+i*17),rx:r(8,18,seed+i*7),ry:r(3,7,seed+i*11)}));return<>{Array.from({length:10},(_,i)=>{const a=(i/10)*Math.PI*2;return<line key={i} x1="50" y1="18" x2={50+Math.cos(a)*48} y2={18+Math.sin(a)*48} stroke={t.a} strokeWidth=".25" opacity=".09"/>;})}{ri}{cl.map((c,i)=><ellipse key={i} cx={c.cx} cy={c.cy} rx={c.rx} ry={c.ry} fill={t.p} opacity={.04+i*.025}/>)}<circle cx="50" cy="18" r="5" fill={t.p} opacity=".18"/></>;}
+    if(artType==="earth"){const ly=Array.from({length:7},(_,i)=>{const y=20+i*11+r(-3,3,seed+i*7);const pts=Array.from({length:11},(_,j)=>`${j*11} ${y+r(-2,2,seed+i*7+j)}`).join(' ');return<polyline key={i} points={pts} fill="none" stroke={i%2===0?t.p:t.a} strokeWidth=".45" opacity={.09+i*.05}/>;});const lv=Array.from({length:5},(_,i)=>{const x=r(15,85,seed+i*13),y=r(15,80,seed+i*17),s=r(3,7,seed+i*7);return<ellipse key={i} cx={x} cy={y} rx={s} ry={s*.5} fill={t.p} opacity={.07+i*.04} transform={`rotate(${r(-40,40,seed+i*3)} ${x} ${y})`}/>;});return<>{ly}{lv}<path d="M50 80 Q41 71 31 84 M50 80 Q59 71 69 84 M50 80 Q50 66 50 56" fill="none" stroke={t.p} strokeWidth=".55" opacity=".22" strokeLinecap="round"/><circle cx="50" cy="56" r="3.5" fill={t.a} opacity=".28"/></>;}
+    const nd=Array.from({length:8},(_,i)=>({x:r(10,90,seed+i*13),y:r(10,90,seed+i*17)}));
+    return<>{Array.from({length:6},(_,i)=>{const a=nd[i],b=nd[(i+2)%8];return<line key={i} x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke={t.p} strokeWidth=".38" opacity=".13"/>;})}{nd.map((n,i)=><circle key={i} cx={n.x} cy={n.y} r={i%3===0?2.3:1.4} fill={t.p} opacity={.18+i*.04}/>)}<circle cx="50" cy="50" r="9" fill="none" stroke={t.a} strokeWidth=".45" opacity=".22" strokeDasharray="3 2"/><circle cx="50" cy="50" r="3.5" fill={t.p} opacity=".28"/></>;
+  };
+  const kwL=()=>{
+    if(!dreamText) return null;
+    if(has("용","룡")) return<path d={`M18 78 Q33 ${50+r(-12,12,seed)} 50 50 Q67 ${50+r(-12,12,seed+1)} 82 22`} fill="none" stroke={t.a} strokeWidth="1.1" opacity=".25" strokeLinecap="round"/>;
+    if(has("사람","어머니","아버지","할머니","할아버지","남자","여자","친구","남편","아내","아들","딸")) return<g opacity=".16"><circle cx="50" cy="30" r="6.5" fill={t.p}/><path d="M39 54 Q50 42 61 54 L64 78 H36 Z" fill={t.p}/></g>;
+    if(has("뱀","동물","강아지","고양이","호랑이","돼지","소","말")) return<path d="M15 70 C32 28 68 72 85 30" fill="none" stroke={t.a} strokeWidth="1.3" opacity=".22" strokeLinecap="round"/>;
+    if(has("집","건물","아파트","방")) return<g opacity=".16"><polygon points="50,20 74,44 26,44" fill="none" stroke={t.p} strokeWidth=".75"/><rect x="35" y="44" width="30" height="29" fill="none" stroke={t.p} strokeWidth=".75"/><rect x="44" y="57" width="12" height="16" fill={t.p} opacity=".28"/></g>;
+    return null;
+  };
+  return(
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%",display:"block",background:t.bg}}>
+      <defs><radialGradient id={`rg${seed}`} cx="50%" cy="40%" r="65%"><stop offset="0%" stopColor={t.s} stopOpacity=".28"/><stop offset="100%" stopColor={t.bg} stopOpacity="0"/></radialGradient><filter id={`bl${seed}`}><feGaussianBlur stdDeviation="1.1"/></filter></defs>
+      <rect width="100" height="100" fill={`url(#rg${seed})`}/>
+      {Array.from({length:9},(_,i)=><line key={"h"+i} x1="0" y1={i*12} x2="100" y2={i*12} stroke={t.p} strokeWidth=".11" opacity=".06"/>)}
+      {Array.from({length:9},(_,i)=><line key={"v"+i} x1={i*12} y1="0" x2={i*12} y2="100" stroke={t.p} strokeWidth=".11" opacity=".06"/>)}
+      {special()}{kwL()}
+      {Array.from({length:3},(_,i)=><circle key={i} cx={r(22,78,seed+i*31)} cy={r(22,78,seed+i*37)} r={r(7,16,seed+i*23)} fill={i%2===0?t.p:t.s} opacity={.03+i*.02} filter={`url(#bl${seed})`}/>)}
+    </svg>
+  );
+}
+
+function DVOverlay({artType,seed,dreamText,onDone}){
+  const [ex,setEx]=useState(false);
+  const L={water:"AQUA DREAM",fire:"FLAME VISION",gold:"GOLDEN OMEN",sky:"SKY VOYAGE",earth:"EARTH SPIRIT",default:"DREAM SIGNAL"};
+  useEffect(()=>{const t1=setTimeout(()=>setEx(true),2000);const t2=setTimeout(()=>onDone(),2850);return()=>{clearTimeout(t1);clearTimeout(t2);};},[]);
+  return(
+    <div className={"dv-overlay"+(ex?" exit":"")}>
+      <div className="dv-bd"/>
+      <div className="dv-c">
+        <DreamArt artType={artType} seed={seed} dreamText={dreamText}/>
+        <div className="dv-gl"/>{!ex&&<div className="dv-scan"/>}
+        <div className="dv-co tl"/><div className="dv-co tr"/>
+        <div className="dv-co bl"/><div className="dv-co br"/>
+        <div className="dv-xh">
+          <svg viewBox="0 0 90 90" fill="none" style={{width:"100%",height:"100%"}}>
+            <circle cx="45" cy="45" r="29" stroke="#00d4ff" strokeWidth=".8" strokeDasharray="4 3" opacity=".6"/>
+            <circle cx="45" cy="45" r="17" stroke="#00d4ff" strokeWidth=".5" opacity=".4"/>
+            <circle cx="45" cy="45" r="4.5" fill="#00d4ff" opacity=".9"/>
+            <line x1="45" y1="5" x2="45" y2="24" stroke="#00d4ff" strokeWidth="1.2" opacity=".55"/>
+            <line x1="45" y1="66" x2="45" y2="85" stroke="#00d4ff" strokeWidth="1.2" opacity=".55"/>
+            <line x1="5" y1="45" x2="24" y2="45" stroke="#00d4ff" strokeWidth="1.2" opacity=".55"/>
+            <line x1="66" y1="45" x2="85" y2="45" stroke="#00d4ff" strokeWidth="1.2" opacity=".55"/>
+          </svg>
+        </div>
+        <div className="dv-tag">{L[artType]||"DREAM SIGNAL"}</div>
+        <div className="dv-st">꿈 비전 렌더링 중...</div>
+      </div>
+    </div>
+  );
+}
+
+function SBall({n,i}){
+  const [on,setOn]=useState(false);
+  useEffect(()=>{const t=setTimeout(()=>setOn(true),i*160+350);return()=>clearTimeout(t);},[]);
+  return<div className={"ball "+BC[i]+(on?" on":"")}>{n}</div>;
+}
+
+function Lucky({numbers,reasons}){
+  return(
+    <div>
+      <div className="balls">{numbers?.map((n,i)=><SBall key={i} n={n} i={i}/>)}</div>
+      <div style={{display:"flex",flexDirection:"column",gap:9,marginTop:10}}>
+        {numbers?.map((n,i)=>reasons?.[i]?(
+          <div key={i} className="ne" style={{borderLeftColor:NC[i]}}>
+            <div className="nt">
+              <div className={"nb "+BC[i]}>{n}</div>
+              <div className="nk">{i+1}번 · {reasons[i].keyword}</div>
+            </div>
+            <div className="nr">{reasons[i].reason}</div>
+          </div>
+        ):null)}
+      </div>
+    </div>
+  );
+}
+
+function BonusSets({sets}){
+  if(!sets||!sets.length)return null;
+  return(
+    <div style={{marginTop:16,borderTop:"1px solid rgba(255,255,255,.08)",paddingTop:14}}>
+      <div style={{fontFamily:"'Share Tech Mono',monospace",fontSize:".58rem",color:"var(--dim)",letterSpacing:".18em",marginBottom:10}}>
+        ➕ 오행 상생 보조 번호 · 핵심 세트와 함께 구매 추천
+      </div>
+      {sets.map((s,i)=>(
+        <div key={i} style={{marginBottom:10,padding:"10px 12px",background:"rgba(255,255,255,.03)",borderRadius:8,border:"1px solid rgba(255,255,255,.07)"}}>
+          <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:7}}>
+            <span style={{fontFamily:"'Share Tech Mono',monospace",fontSize:".58rem",color:"var(--ac)",letterSpacing:".1em"}}>{s.label}</span>
+          </div>
+          <div className="balls" style={{justifyContent:"flex-start",gap:6}}>
+            {s.numbers?.map((n,j)=><SBall key={j} n={n} i={j}/>)}
+          </div>
+          <div style={{fontSize:".72rem",color:"rgba(232,244,255,.55)",marginTop:7,lineHeight:1.5}}>{s.desc}</div>
+        </div>
+      ))}
+    </div>
+  );
+}function SharePanel({res,dreamText,artType,artSeed,cardRef,dreamImg}){
+  const [toast,setToast]=useState("");
+  const show=(m)=>{setToast(m);setTimeout(()=>setToast(""),2800);};
+  const copyLink=()=>{const u=window.location.href;navigator.clipboard?navigator.clipboard.writeText(u).then(()=>show("🔗 링크가 복사됐어요!")).catch(()=>show("링크: "+u)):show("링크: "+u);};
+
+  const savePNG=async()=>{
+    // AI 이미지가 있으면 → 이미지를 Canvas에 그려서 꿈 텍스트와 합성 후 저장
+    if(dreamImg){
+      try{
+        show("📸 이미지 저장 중...");
+        const img=new Image();
+        img.crossOrigin="anonymous";
+        img.onload=()=>{
+          const W=768,H=512;
+          const cv=document.createElement("canvas");cv.width=W;cv.height=H;
+          const ctx=cv.getContext("2d");
+          // 이미지 그리기
+          ctx.drawImage(img,0,0,W,H);
+          // 하단 그라디언트 오버레이
+          const grad=ctx.createLinearGradient(0,H*0.55,0,H);
+          grad.addColorStop(0,"rgba(2,5,16,0)");
+          grad.addColorStop(1,"rgba(2,5,16,0.92)");
+          ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+          // 꿈 텍스트
+          ctx.fillStyle="rgba(232,244,255,0.92)";
+          ctx.font="italic 15px 'Noto Sans KR',sans-serif";
+          ctx.fillText('"'+(dreamText||"").slice(0,38)+(dreamText.length>38?"...":"")+'"',20,H-52);
+          // 브랜드
+          ctx.fillStyle="rgba(0,212,255,0.8)";
+          ctx.font="11px 'Share Tech Mono',monospace";
+          ctx.fillText("DreamPick 6 · AI VISION",20,H-24);
+          // 다운로드
+          const a=document.createElement("a");
+          a.download="dreampick6-"+Date.now()+".png";
+          a.href=cv.toDataURL("image/png");a.click();
+          show("✅ 이미지 저장 완료!");
+        };
+        img.onerror=()=>{show("⚠️ 이미지 로드 실패 · 직접 이미지를 길게 눌러 저장해보세요");};
+        img.src=dreamImg;
+      }catch{show("⚠️ 저장 실패 · 이미지를 길게 눌러 저장해보세요");}
+      return;
+    }
+    // AI 이미지 없을 때 → html2canvas로 카드 캡처
+    const card=cardRef?.current;
+    if(!card){show("⚠️ 카드를 먼저 불러와 주세요");return;}
+    try{
+      if(!window.html2canvas){
+        show("📸 라이브러리 로딩 중...");
+        await new Promise((rs,rj)=>{const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";s.onload=rs;s.onerror=rj;document.head.appendChild(s);});
+      }
+      show("📸 이미지 생성 중...");
+      const c=await window.html2canvas(card,{scale:2,backgroundColor:"#020510",useCORS:true,logging:false});
+      const a=document.createElement("a");a.download="dreampick6-"+Date.now()+".png";a.href=c.toDataURL("image/png");a.click();
+      show("✅ 저장 완료!");
+    }catch{show("⚠️ 저장 실패");}
+  };
+  const shareKakao=()=>{
+    const title="🌙 내 꿈 해몽 결과 — DreamPick 6";
+    const desc="💰 재물운 "+res.wealth+"점 · ⭐ 성공운 "+res.success+"점\nLucky 6: "+(res.lucky_numbers||[]).join(", ");
+    if(navigator.share){navigator.share({title,text:desc,url:window.location.href}).catch(()=>{});}
+    else{window.open("https://sharer.kakao.com/talk/friends/picker/easylink?app_key=YOUR_KEY&url="+encodeURIComponent(window.location.href)+"&text="+encodeURIComponent(desc),"_blank");}
+    show("💛 카카오톡으로 공유합니다");
+  };
+  return(
+    <>
+      <div className="sp">
+        <div className="cd tl"/><div className="cd tr"/>
+        <div className="pl">결과 저장 & 공유</div>
+        <div className="sb">
+          <div className="sbtn lk" onClick={copyLink}><span className="si">🔗</span><span className="sl3">링크 복사<br/>나중에 다시 보기</span></div>
+          <div className="sbtn pg" onClick={savePNG}><span className="si">📸</span><span className="sl3">이미지 저장<br/>SNS 공유하기</span></div>
+          <div className="sbtn kk" onClick={shareKakao}><span className="si">💛</span><span className="sl3">카카오톡 공유</span></div>
+        </div>
+      </div>
+      {toast&&<div className="toast">{toast}</div>}
+    </>
+  );
+}
+
+function CoupangPanel({artType}){
+  const [tab,setTab]=useState("boost");
+  const d=CDB[artType]||CDB.default;
+  const cur=tab==="boost"?d.boost:d.heal;
+  /* 딥링크가 있으면 그대로 사용, 없으면 trackingCode 포함 검색 URL로 대체 */
+  const itemUrl=(it)=>it.url||("https://www.coupang.com/np/search?q="+encodeURIComponent(it.q)+"&channel=user&trackingCode="+COUPANG_TRACKING);
+  const moreUrl="https://www.coupang.com/np/search?q="+encodeURIComponent(d.l)+"&channel=user&trackingCode="+COUPANG_TRACKING;
+  return(
+    <div className="cp" style={{"--cpc":d.c,"--cpg":d.g,"--cpb":d.c+"44"}}>
+      <div className="cpi">
+        <div className="cd tl"/><div className="cd tr"/>
+        <div className="pl" style={{color:d.c}}>오늘의 처방 아이템</div>
+        <div className="cph"><div className="cpo">{d.i}</div><div><div className="cpn" style={{"--cpc":d.c}}>{d.l}</div><div className="cps">꿈 에너지 맞춤 추천</div></div></div>
+        <div className="cpt">
+          <button className={"cptb"+(tab==="boost"?" act":"")} style={tab==="boost"?{background:d.c,color:"#020510"}:{}} onClick={()=>setTab("boost")}>⚡ 운 강화</button>
+          <button className={"cptb"+(tab==="heal"?" act":"")}  style={tab==="heal" ?{background:d.c,color:"#020510"}:{}} onClick={()=>setTab("heal")}>🌿 위로·힐링</button>
+        </div>
+        <div className="cpr" style={{borderLeftColor:d.c}} key={tab}>{cur.r}</div>
+        <div className="cpg" key={tab+"g"}>
+          {cur.items.map((it,i)=>(
+            <a key={i} href={itemUrl(it)} target="_blank" rel="noopener noreferrer" className="cpit" style={{"--cpc":d.c,"--cpg":d.g}}>
+              <div className="cptg" style={{background:d.c}}>{it.t}</div>
+              <div className="cpem">{it.e}</div>
+              <div className="cpnm">{it.n}</div>
+              <div className="cppr" style={{color:d.c,fontSize:".62rem",opacity:.75}}>쿠팡에서 가격 확인 →</div>
+              <div className="cpbt" style={{borderColor:d.c,color:d.c}}>🛒 쿠팡에서 보기</div>
+            </a>
+          ))}
+        </div>
+        <div className="cpf">
+          <div className="cpnt"><b style={{color:d.c}}>쿠팡 파트너스 제휴 안내</b>이 링크를 통한 구매 시 일정 수수료가 제공됩니다</div>
+          <a href={moreUrl} target="_blank" rel="noopener noreferrer" className="cpab" style={{borderColor:d.c,color:d.c}}>더보기 →</a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Gauge({label,value,cls,delay=0,small=false}){
+  const [w,setW]=useState(0);
+  useEffect(()=>{const t=setTimeout(()=>setW(value),delay);return()=>clearTimeout(t);},[value,delay]);
+  return(<div className={cls}><div className="gh"><span className="gn" style={small?{fontSize:".56rem"}:{}}>{label}</span><span className="gv" style={small?{fontSize:".76rem"}:{}}>{Math.round(value)}<span className="gu">점</span></span></div><div className="gtr">{[25,50,75].map(p=><div key={p} className="gtk" style={{left:p+"%"}}/>)}<div className="gf" style={{width:w+"%"}}/></div></div>);
+}
+function ProbBar({value,delay=0}){
+  const [w,setW]=useState(0);
+  useEffect(()=>{const t=setTimeout(()=>setW(value),delay);return()=>clearTimeout(t);},[value,delay]);
+  return(<div className="pr"><div className="ph"><span className="plb">로또 당첨 확률</span><span className="pv">{Math.round(value)}<span>%</span></span></div><div className="pt"><div className="pf" style={{width:w+"%"}}/></div></div>);
+}
+function Ball({n,i,small=false}){
+  const [on,setOn]=useState(false);
+  useEffect(()=>{const t=setTimeout(()=>setOn(true),i*160+350);return()=>clearTimeout(t);},[i]);
+  if(small) return<div className={"bsm "+BC[i]}>{n}</div>;
+  return<div className={"ball "+BC[i]+(on?" on":"")}>{n}</div>;
+}
+/* ── 당첨 등수 계산 ── */
+function calcGrade(myNums, winNums, bonusNum){
+  if(!winNums||winNums.length<6) return null;
+  const hit = myNums.filter(n=>winNums.includes(n)).length;
+  const hasBonus = myNums.includes(bonusNum);
+  if(hit===6) return 1;
+  if(hit===5&&hasBonus) return 2;
+  if(hit===5) return 3;
+  if(hit===4) return 4;
+  if(hit===3) return 5;
+  return 0;
+}
+
+const GRADE_INFO={
+  1:{label:"🏆 1등 당첨!",cls:"r1",icon:"🎊",desc:"6개 번호 모두 일치 · 최고 등급 당첨!",badge:"g1",prize:"20억원 이상"},
+  2:{label:"🥈 2등 당첨!",cls:"r2",icon:"🎉",desc:"5개 + 보너스 번호 일치",badge:"g2",prize:"약 6천만원"},
+  3:{label:"🥉 3등 당첨!",cls:"r3",icon:"🎈",desc:"5개 번호 일치",badge:"g3",prize:"약 150만원"},
+  4:{label:"✨ 4등 당첨",cls:"r4",icon:"🌟",desc:"4개 번호 일치",badge:null,prize:"5만원"},
+  5:{label:"💫 5등 당첨",cls:"r5",icon:"⭐",desc:"3개 번호 일치",badge:null,prize:"5천원"},
+  0:{label:"미당첨",cls:"none",icon:"🌙",desc:"아쉽지만 다음 꿈에 도전하세요",badge:null,prize:null},
+};
+
+/* ── 당첨 확인 입력 컴포넌트 ── */
+function WinCheck({entry, onWin}){
+  const [nums,setNums]=useState(["","","","","",""]);
+  const [bonus,setBonus]=useState("");
+  const [result,setResult]=useState(null);
+  const refs=Array.from({length:6},()=>useRef(null));
+  const bonusRef=useRef(null);
+
+  const handleNum=(i,v)=>{
+    const val=v.replace(/\D/g,"").slice(0,2);
+    const next=[...nums];next[i]=val;setNums(next);
+    if(val.length===2){
+      if(i<5) refs[i+1].current?.focus();
+      else bonusRef.current?.focus();
+    }
+  };
+
+  const check=()=>{
+    const w=nums.map(n=>parseInt(n)).filter(n=>n>=1&&n<=45);
+    const b=parseInt(bonus);
+    if(w.length!==6){alert("당첨 번호 6개를 모두 입력해주세요 (1~45)");return;}
+    const grade=calcGrade(entry.numbers||[],w,b||0);
+    setResult({grade,winNums:w,bonusNum:b||0});
+    if(grade>=1&&grade<=3) onWin(entry.id,grade);
+  };
+
+  return(
+    <div className="win-check">
+      <div className="win-check-title">// 🎯 당첨 번호 대조하기</div>
+      <div className="win-input-row">
+        {nums.map((v,i)=>(
+          <input key={i} ref={refs[i]} className="win-num-input" type="text"
+            inputMode="numeric" placeholder={i+1} value={v}
+            onChange={e=>handleNum(i,e.target.value)}
+            style={{borderColor:result&&result.winNums[i]&&(entry.numbers||[]).includes(result.winNums[i])?"var(--go)":undefined}}/>
+        ))}
+        <div className="win-bonus-label">
+          <input ref={bonusRef} className="win-bonus-input" type="text"
+            inputMode="numeric" placeholder="+" value={bonus}
+            onChange={e=>setBonus(e.target.value.replace(/\D/g,"").slice(0,2))}/>
+          <span style={{fontSize:".45rem",color:"var(--dim)"}}>보너스</span>
+        </div>
+        <button className="win-btn" onClick={check}>확인</button>
+      </div>
+
+      {result&&(()=>{
+        const g=GRADE_INFO[result.grade]||GRADE_INFO[0];
+        return(
+          <div className={"win-result "+g.cls}>
+            <div className="win-result-icon">{g.icon}</div>
+            <div className="win-result-text">
+              <div className="win-result-grade">{g.label} {g.prize&&<span style={{fontFamily:"'Share Tech Mono',monospace",fontSize:".65rem",fontWeight:400,opacity:.8}}>({g.prize})</span>}</div>
+              <div className="win-result-desc">{g.desc}</div>
+              <div className="win-matched">
+                {(entry.numbers||[]).map((n,i)=>{
+                  const hit=result.winNums.includes(n);
+                  return hit
+                    ? <div key={i} className={"win-ball-hit "+BC[i]}>{n}</div>
+                    : <div key={i} className="win-ball-miss">{n}</div>;
+                })}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+    </div>
+  );
+}
+
+/* ── 축하 오버레이 ── */
+function ConfettiOverlay({grade, onClose}){
+  const g=GRADE_INFO[grade]||GRADE_INFO[1];
+  const particles=Array.from({length:60},(_,i)=>({
+    id:i,
+    left:Math.random()*100,
+    delay:Math.random()*2,
+    dur:2+Math.random()*3,
+    color:["#ffd700","#ff6b00","#00d4ff","#ff2d78","#00ff88","#7b2fff"][i%6],
+    size:4+Math.random()*8,
+  }));
+  return(
+    <div className="confetti-overlay" onClick={onClose}>
+      {particles.map(p=>(
+        <div key={p.id} className="c-particle" style={{
+          left:p.left+"%",top:"-20px",
+          width:p.size,height:p.size,
+          background:p.color,
+          animationDelay:p.delay+"s",
+          animationDuration:p.dur+"s",
+        }}/>
+      ))}
+      <div className="confetti-msg" onClick={e=>e.stopPropagation()}>
+        <div style={{fontSize:"2.5rem",marginBottom:8}}>🎊</div>
+        <div className="confetti-grade">{g.label}</div>
+        <div className="confetti-sub">DreamPick 6의 꿈 해몽 번호로<br/>{grade===1?"1등에":`${grade}등에`} 당첨되셨습니다!</div>
+        <div style={{fontFamily:"'Share Tech Mono',monospace",fontSize:".65rem",color:"var(--dim)",marginTop:10}}>{g.prize} 예상 수령</div>
+        <button className="confetti-close" onClick={onClose}>✓ 확인</button>
+      </div>
+    </div>
+  );
+}
+
+/* ── JournalItem (당첨 기능 포함) ── */
+function JournalItem({entry, onWin, isWinner}){
+  const [open,setOpen]=useState(false);
+  const grade=entry.winGrade;
+  const g=grade?GRADE_INFO[grade]:null;
+
+  return(
+    <div className={"ji"+(open?" open":"")+(grade&&grade<=3?" winner-"+grade:"")}>
+      {/* 핀 뱃지 */}
+      {g&&g.badge&&(
+        <div style={{marginBottom:4}}>
+          <span className={"pin-badge "+g.badge}>
+            {g.icon} {g.label} · {g.prize}
+          </span>
+        </div>
+      )}
+      <div className="jdot"/>
+      <div className="jc">
+        <div className="jh" onClick={()=>setOpen(o=>!o)}>
+          <div className="jm">
+            <div style={{display:"flex",alignItems:"center",gap:7}}>
+              <span className="jd">{entry.date}</span>
+              <span className="jsc">💰{Math.round(entry.wealth)}점</span>
+              {grade&&grade<=3&&<span style={{fontFamily:"'Share Tech Mono',monospace",fontSize:".52rem",color:"var(--go)",letterSpacing:".06em"}}>🏆 {grade}등</span>}
+            </div>
+            <div className="jdr">{entry.dreamText}</div>
+          </div>
+          <div className="jbm">{(entry.numbers||[]).slice(0,3).map((n,i)=><div key={i} className="mb" style={MS[i]}>{n}</div>)}</div>
+          <div className="jch">▼</div>
+        </div>
+        <div className="jb">
+          {/* 당첨 결과 상세 */}
+          {grade&&grade<=5&&g&&(
+            <div className={"win-result "+g.cls} style={{marginBottom:12,marginTop:4}}>
+              <div className="win-result-icon">{g.icon}</div>
+              <div className="win-result-text">
+                <div className="win-result-grade">{g.label}</div>
+                <div className="win-result-desc">{g.desc} {g.prize&&"· "+g.prize}</div>
+              </div>
+            </div>
+          )}
+          <div className="jeg">
+            <div style={{borderRadius:9,overflow:"hidden",border:"1px solid rgba(0,212,255,.12)",aspectRatio:"4/3"}}><DreamArt artType={entry.artType||"default"} seed={entry.id*7} dreamText={entry.dreamText}/></div>
+            <div style={{display:"flex",flexDirection:"column",gap:9,justifyContent:"center"}}><Gauge label="재물운" value={entry.wealth} cls="gw" delay={50} small/><Gauge label="애정운" value={entry.love} cls="gl" delay={150} small/><Gauge label="성공운" value={entry.success} cls="gs" delay={250} small/></div>
+          </div>
+          <div style={{fontFamily:"'Share Tech Mono',monospace",fontSize:".55rem",color:"var(--az)",letterSpacing:".15em",marginBottom:5,opacity:.7}}>// LUCKY NUMBERS</div>
+          <div className="jeb">{(entry.numbers||[]).map((n,i)=><Ball key={i} n={n} i={i} small/>)}</div>
+          {entry.interp&&<div className="jei"><div className="jeil">// AI INTERPRETATION</div>{entry.interp}</div>}
+          {/* 당첨 확인 */}
+          {!grade&&<WinCheck entry={entry} onWin={onWin}/>}
+          <div className="sn"><div className="snd"/>공개 기록 · 누구나 열람 가능</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════
+// 🔑 API 키 설정
+// DALL-E 3: OPENAI_KEY에 본인 키 입력 ("sk-...")
+// 무료 테스트: 빈 문자열 "" → Pollinations.ai 자동 사용
+// ══════════════════════════════════════════════════════
+const OPENAI_KEY = "";
+
+async function generateDreamImage(prompt) {
+  if (OPENAI_KEY) {
+    const r = await fetch("https://api.openai.com/v1/images/generations", {
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+OPENAI_KEY},
+      body:JSON.stringify({model:"dall-e-3",prompt,n:1,size:"1024x1024",quality:"standard"})
+    });
+    const d = await r.json();
+    if (d.data?.[0]?.url) return d.data[0].url;
+  }
+  // 무료 대안: Pollinations.ai
+  return "https://image.pollinations.ai/prompt/"+encodeURIComponent(prompt)
+    +"?width=768&height=512&nologo=true&seed="+Math.floor(Math.random()*9999);
+}
+
+const SYS=`당신은 DreamPick 6의 AI 꿈 해몽 엔진입니다. 동양 오행 수리학을 기반으로 번호를 선정합니다. 순수 JSON만 반환하세요. 마크다운 없이.
+
+【동양 오행 수리학 번호 선정 원칙】
+
+오행 배속과 수리:
+- 水(수, water): 기본수 1·6, 상생수 3·8 → 확장: 1,6,11,16,21,26,31,36,41 중 선택
+- 火(화, fire):  기본수 2·7, 상생수 9·4 → 확장: 2,7,12,17,22,27,32,37,42 중 선택
+- 木(목, earth): 기본수 3·8, 상생수 1·6 → 확장: 3,8,13,18,23,28,33,38,43 중 선택
+- 金(금, gold):  기본수 4·9, 상생수 5   → 확장: 4,9,14,19,24,29,34,39,44 중 선택
+- 土(토, sky):   기본수 5·10, 상생수 2·7 → 확장: 5,10,15,20,25,30,35,40,45 중 선택
+- 중화(default): 오행 순환 균형 선택
+
+번호 선정 절차:
+1. 꿈의 art_type으로 주오행 결정
+2. 주오행 기본수 계열에서 2개 선택
+3. 상생오행 수 계열에서 2개 선택
+4. 꿈 속 핵심 요소(사람→土, 동물→木, 하늘·빛→火, 물·비→水, 금속·보석→金)의 오행에서 2개 추가
+5. 6개 모두 1~45 범위, 중복 없이 확정
+
+number_reasons 작성: 각 번호마다 오행 배속 근거 + 꿈 연결 이유를 2~3문장으로 설명
+예시: "17번은 水의 확장수입니다. 꿈속 강물이 흐르는 장면이 水의 기운을 강하게 활성화했으며, 17은 水의 기본수 1과 6의 합에 10을 더한 순환수로 재물의 흐름이 열리는 번호입니다."
+
+출력 JSON:
+{"wealth":재물운0~100정수,"love":애정운0~100정수,"success":성공운0~100정수,"prob":로또당첨확률0~100정수,"lucky_numbers":[1~45중복없는6개정수],"number_reasons":[{"keyword":"오행·키워드 2~4자","reason":"오행 수리학 근거 포함 2~3문장"},{"keyword":"...","reason":"..."},{"keyword":"...","reason":"..."},{"keyword":"...","reason":"..."},{"keyword":"...","reason":"..."},{"keyword":"...","reason":"..."}],"interpretation":"한국어200~300자","art_type":"water|fire|gold|sky|earth|default","image_prompt":"영어 이미지 프롬프트 100자 이내","ohaeng_info":{"main":"주오행 한자+한글","reason":"이 꿈이 해당 오행으로 분류된 이유 1~2문장"}}
+
+art_type: 물/강/비→water, 불/화재/태양→fire, 금/보석/동전→gold, 하늘/날기/구름→sky, 숲/흙/나무→earth, 그외→default
+
+image_prompt 규칙:
+1. 따뜻하고 치유적·희망적 분위기, 무서운 꿈도 긍정적 재해석
+2. 동양적 감성 (한옥, 한복, 수묵화 느낌)
+3. soft watercolor, dreamy pastel, ethereal glow, cinematic lighting
+4. 사람 등장 시 온화하고 밝은 표정, 어둡거나 불안한 요소 절대 금지`;
+
+/* ── PWA 설치 컴포넌트 ── */
+function PWAInstall(){
+  const [showBanner, setShowBanner] = React.useState(false);
+  const [showIOS, setShowIOS] = React.useState(false);
+  const [bannerHide, setBannerHide] = React.useState(false);
+  const [deferredPrompt, setDeferredPrompt] = React.useState(null);
+  const [isInstalled, setIsInstalled] = React.useState(false);
+  const [isIOS, setIsIOS] = React.useState(false);
+
+  React.useEffect(()=>{
+    // 이미 설치된 경우 숨김
+    if(window.matchMedia('(display-mode: standalone)').matches){
+      setIsInstalled(true); return;
+    }
+    if(sessionStorage.getItem('pwa_dismissed')) return;
+
+    // iOS 감지
+    const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+    setIsIOS(ios);
+
+    if(ios){
+      // iOS는 beforeinstallprompt 없음 → 직접 안내
+      setTimeout(()=>setShowBanner(true), 3000);
+    } else {
+      // Android/Chrome — beforeinstallprompt 이벤트 대기
+      window.addEventListener('beforeinstallprompt', (e)=>{
+        e.preventDefault();
+        setDeferredPrompt(e);
+        setTimeout(()=>setShowBanner(true), 3000);
+      });
+      // 설치 완료 감지
+      window.addEventListener('appinstalled', ()=>{
+        setIsInstalled(true);
+        setShowBanner(false);
+      });
+    }
+  },[]);
+
+  const handleInstall = async ()=>{
+    if(isIOS){
+      setShowBanner(false);
+      setShowIOS(true);
+      return;
+    }
+    if(deferredPrompt){
+      deferredPrompt.prompt();
+      const result = await deferredPrompt.userChoice;
+      if(result.outcome === 'accepted') setIsInstalled(true);
+      setDeferredPrompt(null);
+    }
+    handleDismiss();
+  };
+
+  const handleDismiss = ()=>{
+    setBannerHide(true);
+    sessionStorage.setItem('pwa_dismissed','1');
+    setTimeout(()=>setShowBanner(false), 320);
+  };
+
+  if(isInstalled) return null;
+
+  return(
+    <React.Fragment>
+      {/* 하단 설치 배너 */}
+      {showBanner&&(
+        <div className={"pwa-banner"+(bannerHide?" hide":"")}>
+          <div className="pwa-icon">🌙</div>
+          <div className="pwa-text">
+            <div className="pwa-title">앱으로 설치하기</div>
+            <div className="pwa-desc">
+              홈 화면에 추가하면 <span>앱처럼 바로 실행</span>됩니다
+            </div>
+          </div>
+          <div className="pwa-btns">
+            <button className="pwa-btn-close" onClick={handleDismiss}>✕</button>
+            <button className="pwa-btn-install" onClick={handleInstall}>
+              {isIOS ? "설치 방법" : "설치하기"}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* iOS 설치 안내 모달 */}
+      {showIOS&&(
+        <div className="ios-modal" onClick={()=>setShowIOS(false)}>
+          <div className="ios-box" onClick={e=>e.stopPropagation()}>
+            <div className="ios-title">🌙 DreamPick 6 앱 설치</div>
+            <div className="ios-sub">아래 순서대로 하시면 홈 화면에 앱이 추가됩니다</div>
+            <div className="ios-steps">
+              <div className="ios-step">
+                <div className="ios-num">1</div>
+                <div className="ios-step-icon">📤</div>
+                <div className="ios-step-text">
+                  하단 메뉴에서 <b>공유 버튼</b>을 탭하세요<br/>
+                  <span style={{fontSize:".72rem",color:"var(--dim)"}}>( 사각형에 화살표 올라가는 아이콘 )</span>
+                </div>
+              </div>
+              <div className="ios-step">
+                <div className="ios-num">2</div>
+                <div className="ios-step-icon">➕</div>
+                <div className="ios-step-text">
+                  스크롤해서 <b>"홈 화면에 추가"</b>를 탭하세요
+                </div>
+              </div>
+              <div className="ios-step">
+                <div className="ios-num">3</div>
+                <div className="ios-step-icon">✅</div>
+                <div className="ios-step-text">
+                  우상단 <b>"추가"</b>를 탭하면 완료!<br/>
+                  홈 화면에 DreamPick 6 앱 아이콘이 생깁니다 🌙
+                </div>
+              </div>
+            </div>
+            <button className="ios-close" onClick={()=>setShowIOS(false)}>
+              확인했습니다
+            </button>
+          </div>
+        </div>
+      )}
+    </React.Fragment>
+  );
+}
+
+function App(){
+  const [txt,setTxt]=useState("");
+  const [loading,setLoading]=useState(false);
+  const [res,setRes]=useState(null);
+  const [journal,setJournal]=useState(SAMPLES);
+  const [err,setErr]=useState("");
+  const [stream,setStream]=useState("");
+  const [streaming,setStreaming]=useState(false);
+  const [showOv,setShowOv]=useState(false);
+  const [showCard,setShowCard]=useState(false);
+  const [seed,setSeed]=useState(42);
+  const [type,setType]=useState("default");
+  const [curTxt,setCurTxt]=useState("");
+  const [curInt,setCurInt]=useState("");
+  const [dreamImg,setDreamImg]=useState(null);
+  const [imgLoading,setImgLoading]=useState(false);
+  const cardRef=useRef(null);
+
+  // 동의 배너 상태 (sessionStorage로 한 번 동의하면 세션 내 숨김)
+  const [showBanner,setShowBanner]=useState(()=>!sessionStorage.getItem("dp6_agreed"));
+  const [bannerHide,setBannerHide]=useState(false);
+  const [showModal,setShowModal]=useState(false);
+  const [modalTab,setModalTab]=useState("privacy");
+  const [confettiGrade,setConfettiGrade]=useState(null);
+
+  const agree=()=>{
+    setBannerHide(true);
+    sessionStorage.setItem("dp6_agreed","1");
+    setTimeout(()=>setShowBanner(false),380);
+  };
+
+  // 당첨 확인 → 해당 저널 아이템에 등수 표시 + 상단 핀
+  const handleWin=(entryId, grade)=>{
+    setJournal(prev=>{
+      const updated=prev.map(e=>e.id===entryId?{...e,winGrade:grade}:e);
+      // 1·2·3등이면 상단으로 핀
+      if(grade<=3){
+        const winners=updated.filter(e=>e.winGrade&&e.winGrade<=3).sort((a,b)=>a.winGrade-b.winGrade);
+        const others=updated.filter(e=>!e.winGrade||e.winGrade>3);
+        return [...winners,...others];
+      }
+      return updated;
+    });
+    if(grade<=2) setConfettiGrade(grade);
+  };
+
+  const analyze=async()=>{
+    if(!txt.trim()) return;
+    setLoading(true);setErr("");setRes(null);setStream("");
+    setShowOv(false);setShowCard(false);setCurTxt(txt);setDreamImg(null);
+    try{
+      // 1) Claude 해몽 분석
+      const r=await fetch("http://localhost:8080/analyze",{
+    method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({dream:txt})
+});
+const d=await r.json();
+            const p=JSON.parse((d.result||"").replace(/```json|```/g,"").trim());
+      const s=Date.now()%997;
+      setSeed(s);setType(p.art_type||"default");setCurInt(p.interpretation||"");
+      setShowOv(true);setRes(p);setStreaming(true);
+      let i=0;const iv=p.interpretation||"";
+      const tm=setInterval(()=>{i+=2;setStream(iv.slice(0,i));if(i>=iv.length){clearInterval(tm);setStreaming(false);}},24);
+      setJournal(prev=>[{id:Date.now(),dreamText:txt,
+        date:new Date().toLocaleString("ko-KR",{month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}),
+        wealth:p.wealth,love:p.love,success:p.success,prob:p.prob,
+        numbers:p.lucky_numbers,reasons:p.number_reasons,
+        interp:p.interpretation,artType:p.art_type||"default"},...prev]);
+
+      // 2) 이미지 생성 (병렬 — 오버레이 뒤에서 조용히 진행)
+      if(p.image_prompt){
+        setImgLoading(true);
+        generateDreamImage(p.image_prompt)
+          .then(url=>setDreamImg(url))
+          .catch(()=>setDreamImg(null))
+          .finally(()=>setImgLoading(false));
+      }
+    }catch(e){setErr("회로 오류: "+e.message);}
+    finally{setLoading(false);}
+  };
+
+  return(
+    <React.Fragment>
+      <div className="gb"/><div className="sl"/>
+      {showOv&&<DVOverlay artType={type} seed={seed} dreamText={curTxt} onDone={()=>{setShowOv(false);setShowCard(true);}}/>}
+      <div className="w">
+        <header className="hd">
+          <div className="lr">
+            <div className="li">
+              <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+                <circle cx="14" cy="14" r="9" stroke="#00d4ff" strokeWidth="1.5"/>
+                <path d="M14 5v4M14 19v4M5 14h4M19 14h4" stroke="#00d4ff" strokeWidth="1.5" strokeLinecap="round"/>
+                <circle cx="14" cy="14" r="3.5" fill="#00d4ff" opacity=".8"/>
+                <path d="M9 9l2.5 2.5M16.5 16.5L19 19M19 9l-2.5 2.5M11.5 16.5L9 19" stroke="#00d4ff" strokeWidth="1" strokeLinecap="round"/>
+              </svg>
+            </div>
+            <div className="lt">DreamPick 6</div>
+          </div>
+          <div className="sl2">당신의 꿈을 <b>부(Wealth)</b>로 환산하는 정밀 회로</div>
+          {!window.matchMedia('(display-mode: standalone)').matches&&(
+            <div style={{display:"flex",justifyContent:"center",marginTop:6}}>
+              <button className="pwa-header-btn" onClick={()=>{
+                const e=new Event('show-pwa-banner');window.dispatchEvent(e);
+                // iOS 감지
+                const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.MSStream;
+                if(ios){document.getElementById('ios-guide-trigger')?.click();}
+                else{sessionStorage.removeItem('pwa_dismissed');window.location.reload();}
+              }}>
+                <div className="pwa-dot"/>
+                📲 홈 화면에 앱으로 추가하기
+              </button>
+            </div>
+          )}
+          <div className="hl"/>
+        </header>
+
+        <div className="p">
+          <div className="cd tl"/><div className="cd tr"/><div className="cd bl"/><div className="cd br"/>
+          <div className="pl">Dream Input Terminal</div>
+          <textarea className="ta" placeholder="꿈의 내용을 자세히 입력하세요... (예: 강에서 큰 잉어를 잡았는데 용이 되어 하늘로 날아갔어요)" value={txt} onChange={e=>setTxt(e.target.value)} disabled={loading}/>
+          <button className="btn" onClick={analyze} disabled={loading||!txt.trim()}>
+            {loading&&<div className="cl"/>}
+            {loading?<span className="ld">회로 분석중<span>.</span><span>.</span><span>.</span></span>:"⚡ 꿈 분석하기 · ANALYZE"}
+          </button>
+          {err&&<div className="et">{err}</div>}
+        </div>
+
+        {res&&(
+          <div className="da">
+            <div className="dg">
+              {showCard?(
+                <div className="p dc-wrap" ref={cardRef}>
+                  <div className="dc">
+                    {/* AI 이미지 or SVG 폴백 */}
+                    {dreamImg ? (
+                      <img src={dreamImg} alt="Dream Vision"
+                        style={{width:"100%",height:"100%",objectFit:"cover",display:"block",borderRadius:12}}
+                        onError={()=>setDreamImg(null)}/>
+                    ) : imgLoading ? (
+                      <div style={{width:"100%",height:"100%",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",background:"#020510",gap:14}}>
+                        <div style={{fontFamily:"'Share Tech Mono',monospace",fontSize:".6rem",color:"var(--az)",letterSpacing:".15em",animation:"stB .8s ease infinite alternate"}}>✦ AI 이미지 생성 중...</div>
+                        <div style={{fontFamily:"'Share Tech Mono',monospace",fontSize:".52rem",color:"var(--dim)",letterSpacing:".1em"}}>꿈의 비전을 그리고 있어요</div>
+                        <DreamArt artType={type} seed={seed} dreamText={curTxt}/>
+                      </div>
+                    ) : (
+                      <DreamArt artType={type} seed={seed} dreamText={curTxt}/>
+                    )}
+                    {/* 카드 하단 텍스트 오버레이 */}
+                    <div className="dc-ot">
+                      <div className="dc-dt">"{curTxt}"</div>
+                      <div className="dc-it">{curInt.slice(0,55)}{curInt.length>55?"...":""}</div>
+                    </div>
+                    <div className="dc-tr">
+                      <div className="dc-badge">{type.toUpperCase()}</div>
+                      <div className="dc-lbl">{dreamImg?"AI VISION":"DREAM VISION"}</div>
+                    </div>
+                  </div>
+                </div>
+              ):(
+                <div className="p" style={{marginBottom:0,display:"flex",alignItems:"center",justifyContent:"center",minHeight:170}}>
+                  <span style={{fontFamily:"'Share Tech Mono',monospace",fontSize:".63rem",color:"var(--dim)",letterSpacing:".15em"}}>{showOv?"// RENDERING...":"// STANDBY"}</span>
+                </div>
+              )}
+              <div className="p gau" style={{marginBottom:0}}>
+                <div className="cd tl"/><div className="cd tr"/>
+                <div className="pl">오늘의 운세 점수</div>
+                <Gauge label="💰 재물운" value={res.wealth} cls="gw" delay={120}/>
+                <Gauge label="❤️ 애정운" value={res.love}   cls="gl" delay={380}/>
+                <Gauge label="⭐ 성공운" value={res.success} cls="gs" delay={630}/>
+                <ProbBar value={res.prob} delay={900}/>
+              </div>
+            </div>
+            <div className="p"><div className="cd tl"/><div className="cd tr"/><div className="pl">AI 꿈 해몽</div><div className="it">{stream}{streaming&&<span className="ic"/>}</div></div>
+            <div className="p"><div className="cd tl"/><div className="cd tr"/><div className="cd bl"/><div className="cd br"/>
+              <div className="pl">Lucky 6 — 오행 수리학 기반 추천 번호</div>
+              <OhaengBanner artType={type} ohaengInfo={res.ohaeng_info}/>
+              <Lucky numbers={res.lucky_numbers} reasons={res.number_reasons}/>
+              <BonusSets sets={res.bonus_sets}/>
+            </div>
+            <SharePanel res={res} dreamText={curTxt} artType={type} artSeed={seed} cardRef={cardRef} dreamImg={dreamImg}/>
+            <CoupangPanel artType={type}/>
+          </div>
+        )}
+
+        <div className="js">
+          <div className="jt">꿈 일지 · Dream Journal</div>
+          <div className="tl">{journal.map(e=><JournalItem key={e.id} entry={e} onWin={handleWin}/>)}</div>
+        </div>
+
+        {/* ── 푸터 ── */}
+        <div className="footer">
+          <div className="footer-links">
+            <span className="footer-link" onClick={()=>{setModalTab("privacy");setShowModal(true);}}>개인정보처리방침</span>
+            <span className="footer-link" onClick={()=>{setModalTab("terms");setShowModal(true);}}>이용약관</span>
+            <span className="footer-link" onClick={()=>window.open("mailto:help@dreampick6.app")}>문의하기</span>
+          </div>
+          <div className="footer-copy">© 2025 DreamPick 6 · All rights reserved</div>
+          <div className="footer-coupang">이 서비스는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</div>
+        </div>
+      </div>
+
+      {/* ── PWA 설치 배너 ── */}
+      <PWAInstall/>
+
+      {/* ── 축하 오버레이 (1·2등) ── */}
+      {confettiGrade&&<ConfettiOverlay grade={confettiGrade} onClose={()=>setConfettiGrade(null)}/>}
+
+      {/* ── 하단 동의 배너 ── */}
+      {showBanner&&(
+        <div className={"consent-banner"+(bannerHide?" hide":"")}>
+          <div className="consent-icon">🔒</div>
+          <div className="consent-text">
+            DreamPick 6는 서비스 제공을 위해 입력하신 꿈 내용을 AI 분석 및 이미지 생성에 활용합니다.
+            서비스 이용 시 <a onClick={()=>{setModalTab("terms");setShowModal(true);}}>이용약관</a> 및 <a onClick={()=>{setModalTab("privacy");setShowModal(true);}}>개인정보처리방침</a>에 동의한 것으로 간주됩니다.
+            <span className="cp-note">본 서비스는 오락 목적이며 실제 미래를 예측하지 않습니다. · 쿠팡 파트너스 제휴 서비스</span>
+          </div>
+          <div className="consent-btns">
+            <button className="consent-btn-detail" onClick={()=>{setModalTab("privacy");setShowModal(true);}}>자세히 보기</button>
+            <button className="consent-btn-agree" onClick={agree}>동의하고 시작하기</button>
+          </div>
+        </div>
+      )}
+
+      {/* ── 약관 모달 ── */}
+      {showModal&&(
+        <div className="modal-overlay" onClick={e=>{if(e.target.className==="modal-overlay")setShowModal(false);}}>
+          <div className="modal-box">
+            <div className="modal-header">
+              <div className="modal-title">📋 법적 고지</div>
+              <button className="modal-close" onClick={()=>setShowModal(false)}>✕ 닫기</button>
+            </div>
+            <div className="modal-tabs">
+              <div className={"modal-tab"+(modalTab==="privacy"?" act":"")} onClick={()=>setModalTab("privacy")}>개인정보처리방침</div>
+              <div className={"modal-tab"+(modalTab==="terms"?" act":"")} onClick={()=>setModalTab("terms")}>이용약관</div>
+            </div>
+            <div className="modal-body">
+              {modalTab==="privacy"&&(
+                <div>
+                  <p><strong>시행일:</strong> 2025년 3월 20일</p>
+                  <h3>수집 항목</h3>
+                  <p>서비스는 회원가입 없이 이용 가능하며, 이름·연락처 등 직접 식별 가능한 개인정보는 수집하지 않습니다. 이용자가 입력한 꿈 내용은 AI 분석 목적으로만 사용됩니다.</p>
+                  <h3>AI 서비스 활용 고지</h3>
+                  <div className="warn-box">
+                    <p>입력하신 꿈 내용은 다음 AI 서비스에 전달됩니다.</p>
+                    <ul>
+                      <li><strong>Claude API (Anthropic)</strong> — 꿈 해몽 분석</li>
+                      <li><strong>DALL-E 3 (OpenAI) / Pollinations.ai</strong> — Dream Vision 이미지 생성</li>
+                    </ul>
+                    <p>전달된 내용은 분석 후 즉시 삭제되며 별도 서버에 저장되지 않습니다.</p>
+                  </div>
+                  <h3>보유 기간</h3>
+                  <p>별도 서버에 저장하지 않으며, 브라우저 종료 시 자동 삭제됩니다.</p>
+                  <h3>제3자 위탁</h3>
+                  <ul>
+                    <li>Anthropic (Claude API) — 꿈 텍스트 분석</li>
+                    <li>OpenAI / Pollinations.ai — AI 이미지 생성</li>
+                    <li>쿠팡 파트너스 — 제휴 상품 추천</li>
+                  </ul>
+                  <h3>이용자 권리</h3>
+                  <p>개인정보 관련 문의는 help@dreampick6.app 으로 연락하시면 영업일 기준 10일 이내 처리합니다.</p>
+                  <h3>만 14세 미만</h3>
+                  <p>만 14세 미만 이용자는 법정대리인 동의가 필요합니다.</p>
+                </div>
+              )}
+              {modalTab==="terms"&&(
+                <div>
+                  <p><strong>시행일:</strong> 2025년 3월 20일</p>
+                  <h3>서비스 목적 및 성격</h3>
+                  <div className="warn-box">
+                    <p>⚠️ DreamPick 6는 <strong>오락·참고 목적</strong>으로만 제공됩니다. AI 해몽 결과, 운세 점수, 추천 번호는 과학적 근거가 없으며 실제 복권 당첨이나 미래 예측을 보장하지 않습니다.</p>
+                  </div>
+                  <h3>이용 자격</h3>
+                  <p>만 14세 이상 누구나 이용 가능합니다. 만 14세 미만은 법정대리인 동의가 필요합니다.</p>
+                  <h3>AI 생성 콘텐츠</h3>
+                  <p>Dream Vision 카드는 AI가 생성한 이미지로 실제 사진이 아닙니다. 이용자는 개인적 용도로 자유롭게 사용할 수 있습니다.</p>
+                  <h3>이용자 의무</h3>
+                  <ul>
+                    <li>타인의 개인정보를 무단으로 입력하지 않습니다</li>
+                    <li>불법·음란·혐오적 내용을 입력하지 않습니다</li>
+                    <li>AI 결과를 사실인 것처럼 허위 유포하지 않습니다</li>
+                  </ul>
+                  <h3>쿠팡 파트너스</h3>
+                  <p>본 서비스는 쿠팡 파트너스 활동의 일환으로 제품을 추천하며, 이에 따른 일정액의 수수료를 제공받을 수 있습니다.</p>
+                  <h3>면책 조항</h3>
+                  <ul>
+                    <li>AI 해몽 및 운세 결과는 오락 목적이며 실제 결과와 다를 수 있습니다</li>
+                    <li>추천 로또 번호의 당첨을 보장하지 않습니다</li>
+                    <li>외부 API 장애로 인한 서비스 중단에 대해 책임을 제한합니다</li>
+                  </ul>
+                  <h3>준거법</h3>
+                  <p>본 약관은 대한민국 법률에 따라 해석됩니다.</p>
+                </div>
+              )}
+            </div>
+            <div className="modal-footer">
+              <button className="modal-agree-btn" onClick={()=>{setShowModal(false);agree();}}>동의하고 시작하기</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
