@@ -1364,7 +1364,7 @@ function App(){
     setShowOv(false);setShowCard(false);setCurTxt(txt);setDreamImg(null);
     try{
       // 1) Claude 해몽 분석
-      const r=await fetch("http://localhost:8080/analyze",{
+      const r=await fetch("/api/analyze",{
     method:"POST",headers:{"Content-Type":"application/json"},
     body:JSON.stringify({dream:txt})
 });
