@@ -1289,12 +1289,12 @@ function PWAInstall(){
     if(window.matchMedia('(display-mode: standalone)').matches){
       setIsInstalled(true); return;
     }
-    if(sessionStorage.getItem('pwa_dismissed')) return;
 
     // iOS 감지
     const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
     setIsIOS(ios);
 
+    // Android: beforeinstallprompt는 항상 캡처 (dismissed 여부 무관)
     if(!ios){
       window.addEventListener('beforeinstallprompt', (e)=>{
         e.preventDefault();
@@ -1305,16 +1305,25 @@ function PWAInstall(){
         setShowBanner(false);
       });
     }
+
     const showIt = ()=>{
-      if(sessionStorage.getItem('pwa_dismissed')) return;
+      if(localStorage.getItem('pwa_dismissed')) return;
       setShowBanner(true);
     };
-    if(sessionStorage.getItem('dp6_agreed')){
+    // iOS 모달 직접 열기 이벤트
+    const showIOSModal = ()=>{ setShowIOS(true); };
+    window.addEventListener('show-ios-install', showIOSModal);
+
+    // 자동 표시: dismissed 아니고 동의한 경우 3초 후
+    if(!localStorage.getItem('pwa_dismissed') && localStorage.getItem('dp6_agreed')){
       setTimeout(showIt, 3000);
-    } else {
+    } else if(!localStorage.getItem('pwa_dismissed')){
       window.addEventListener('show-pwa-banner', showIt);
     }
-    return ()=> window.removeEventListener('show-pwa-banner', showIt);
+    return ()=>{
+      window.removeEventListener('show-pwa-banner', showIt);
+      window.removeEventListener('show-ios-install', showIOSModal);
+    };
   },[]);
 
   const handleInstall = async ()=>{
@@ -1328,13 +1337,17 @@ function PWAInstall(){
       const result = await deferredPrompt.userChoice;
       if(result.outcome === 'accepted') setIsInstalled(true);
       setDeferredPrompt(null);
+      handleDismiss();
+    } else {
+      // deferredPrompt 없으면 (이미 설치됐거나 Chrome 아닌 경우) 안내
+      alert("브라우저 메뉴(⋮) → "홈 화면에 추가"를 선택해 주세요!");
+      handleDismiss();
     }
-    handleDismiss();
   };
 
   const handleDismiss = ()=>{
     setBannerHide(true);
-    sessionStorage.setItem('pwa_dismissed','1');
+    localStorage.setItem('pwa_dismissed','1');
     setTimeout(()=>setShowBanner(false), 320);
   };
 
@@ -1347,7 +1360,7 @@ function PWAInstall(){
         <div className={"pwa-banner"+(bannerHide?" hide":"")}>
           <div className="pwa-icon">🌙</div>
           <div className="pwa-text">
-            <div className="pwa-title">앱으로 설치하기</div>
+            <div className="pwa-title">📲 앱으로 설치하기</div>
             <div className="pwa-desc">
               홈 화면에 추가하면 <span>앱처럼 바로 실행</span>됩니다
             </div>
@@ -1355,7 +1368,7 @@ function PWAInstall(){
           <div className="pwa-btns">
             <button className="pwa-btn-close" onClick={handleDismiss}>✕</button>
             <button className="pwa-btn-install" onClick={handleInstall}>
-              {isIOS ? "설치 방법" : "설치하기"}
+              "설치하기"
             </button>
           </div>
         </div>
@@ -1365,35 +1378,40 @@ function PWAInstall(){
       {showIOS&&(
         <div className="ios-modal" onClick={()=>setShowIOS(false)}>
           <div className="ios-box" onClick={e=>e.stopPropagation()}>
-            <div className="ios-title">🌙 DreamPick 6 앱 설치</div>
-            <div className="ios-sub">아래 순서대로 하시면 홈 화면에 앱이 추가됩니다</div>
+            <div className="ios-title">🌙 DreamPick 6 설치하기</div>
+            <div className="ios-sub">
+              아이폰은 아래 3단계로 홈 화면에 앱을 추가할 수 있어요<br/>
+              <span style={{fontSize:".7rem",color:"rgba(0,212,255,0.6)"}}>※ Safari 브라우저에서만 가능합니다</span>
+            </div>
             <div className="ios-steps">
               <div className="ios-step">
                 <div className="ios-num">1</div>
                 <div className="ios-step-icon">📤</div>
                 <div className="ios-step-text">
-                  하단 메뉴에서 <b>공유 버튼</b>을 탭하세요<br/>
-                  <span style={{fontSize:".72rem",color:"var(--dim)"}}>( 사각형에 화살표 올라가는 아이콘 )</span>
+                  하단 가운데 <b>공유 버튼</b>을 탭하세요<br/>
+                  <span style={{fontSize:".72rem",color:"var(--dim)",display:"flex",alignItems:"center",gap:4,marginTop:3}}>
+                    <span style={{fontSize:"1.1rem"}}>⬜</span> 사각형에 위쪽 화살표 아이콘
+                  </span>
                 </div>
               </div>
               <div className="ios-step">
                 <div className="ios-num">2</div>
                 <div className="ios-step-icon">➕</div>
                 <div className="ios-step-text">
-                  스크롤해서 <b>"홈 화면에 추가"</b>를 탭하세요
+                  메뉴를 스크롤해서 <b style={{color:"var(--az)"}}>"홈 화면에 추가"</b> 탭
                 </div>
               </div>
               <div className="ios-step">
                 <div className="ios-num">3</div>
                 <div className="ios-step-icon">✅</div>
                 <div className="ios-step-text">
-                  우상단 <b>"추가"</b>를 탭하면 완료!<br/>
-                  홈 화면에 DreamPick 6 앱 아이콘이 생깁니다 🌙
+                  오른쪽 위 <b style={{color:"var(--az)"}}>"추가"</b> 탭 → 설치 완료!<br/>
+                  <span style={{fontSize:".72rem",color:"var(--dim)"}}>홈 화면에 🌙 DreamPick 6 아이콘이 생겨요</span>
                 </div>
               </div>
             </div>
             <button className="ios-close" onClick={()=>setShowIOS(false)}>
-              확인했습니다
+              알겠어요, 설치할게요!
             </button>
           </div>
         </div>
@@ -1422,7 +1440,7 @@ function App(){
   const cardRef=useRef(null);
 
   // 동의 배너 상태 (sessionStorage로 한 번 동의하면 세션 내 숨김)
-  const [showBanner,setShowBanner]=useState(()=>!sessionStorage.getItem("dp6_agreed"));
+  const [showBanner,setShowBanner]=useState(()=>!localStorage.getItem("dp6_agreed"));
   const [bannerHide,setBannerHide]=useState(false);
   const [showModal,setShowModal]=useState(false);
   const [modalTab,setModalTab]=useState("privacy");
@@ -1430,7 +1448,7 @@ function App(){
 
   const agree=()=>{
     setBannerHide(true);
-    sessionStorage.setItem("dp6_agreed","1");
+    localStorage.setItem("dp6_agreed","1");
     setTimeout(()=>{setShowBanner(false);setTimeout(()=>window.dispatchEvent(new Event("show-pwa-banner")),3000);},380);
   };
 
@@ -1505,11 +1523,14 @@ const d=await r.json();
           {!window.matchMedia('(display-mode: standalone)').matches&&(
             <div style={{display:"flex",justifyContent:"center",marginTop:6}}>
               <button className="pwa-header-btn" onClick={()=>{
-                const e=new Event('show-pwa-banner');window.dispatchEvent(e);
-                // iOS 감지
                 const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.MSStream;
-                if(ios){document.getElementById('ios-guide-trigger')?.click();}
-                else{sessionStorage.removeItem('pwa_dismissed');window.location.reload();}
+                if(ios){
+                  window.dispatchEvent(new Event('show-ios-install'));
+                } else {
+                  // Android: dismissed 초기화 후 배너 표시
+                  localStorage.removeItem('pwa_dismissed');
+                  window.dispatchEvent(new Event('show-pwa-banner'));
+                }
               }}>
                 <div className="pwa-dot"/>
                 📲 홈 화면에 앱으로 추가하기
