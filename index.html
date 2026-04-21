@@ -921,7 +921,12 @@ function BonusSets({sets}){
   const shareKakao=async()=>{
     const title="DreamPick 6";
     const desc="어젯밤 그 꿈, 그냥 넘기실 건가요?\n당신의 꿈 속 숨겨진 행운의 로또 시그널을 확인하세요!\ndreampick6.com";
-    if(navigator.share){
+    const url=window.location.href;
+    // 모바일 여부 판단 (터치 + 좁은 화면)
+    const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if(isMobile && navigator.share){
+      // 모바일: 이미지 파일 포함 공유
       if(dreamImg){
         try{
           const cv=await buildCanvas(false);
@@ -930,19 +935,24 @@ function BonusSets({sets}){
             if(navigator.canShare&&navigator.canShare({files:[file]})){
               await navigator.share({title,text:desc,files:[file]}).catch(()=>{});
             } else {
-              await navigator.share({title,text:desc,url:window.location.href}).catch(()=>{});
+              await navigator.share({title,text:desc,url}).catch(()=>{});
             }
           },"image/png");
         }catch{
-          navigator.share({title,text:desc,url:window.location.href}).catch(()=>{});
+          navigator.share({title,text:desc,url}).catch(()=>{});
         }
       } else {
-        navigator.share({title,text:desc,url:window.location.href}).catch(()=>{});
+        navigator.share({title,text:desc,url}).catch(()=>{});
       }
+      show("💛 카카오톡으로 공유합니다");
     } else {
-      window.open("https://sharer.kakao.com/talk/friends/picker/easylink?url="+encodeURIComponent(window.location.href)+"&text="+encodeURIComponent(desc),"_blank");
+      // 데스크탑: 링크 복사 + 카카오톡 안내
+      const copyText=desc+"\n\n"+url;
+      if(navigator.clipboard){
+        await navigator.clipboard.writeText(copyText).catch(()=>{});
+      }
+      show("📋 링크가 복사됐어요! 카카오톡에 붙여넣기 하세요");
     }
-    show("💛 카카오톡으로 공유합니다");
   };
 
   return(
@@ -952,7 +962,7 @@ function BonusSets({sets}){
         <div className="pl">결과 저장 & 공유</div>
         <div className="sb">
           <div className="sbtn pg" onClick={openImgModal}><span className="si">📸</span><span className="sl3">이미지 보기<br/>& 저장하기</span></div>
-          <div className="sbtn kk" onClick={shareKakao}><span className="si">💛</span><span className="sl3">카카오톡<br/>공유하기</span></div>
+          <div className="sbtn kk" onClick={shareKakao}><span className="si">💛</span><span className="sl3">{/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)?"카카오톡":"링크 복사"}<br/>{"& 카카오 전달"}</span></div>
         </div>
       </div>
       {imgModal&&(
