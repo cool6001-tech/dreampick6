@@ -861,7 +861,7 @@ function BonusSets({sets}){
         ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
         ctx.fillStyle="rgba(232,244,255,0.85)";
         ctx.font="italic 14px 'Noto Sans KR',sans-serif";
-        ctx.fillText('"\'+(dreamText||"").slice(0,40)+(dreamText.length>40?"...":"")+'"',20,H-112);
+        const dt=(dreamText||"").slice(0,40)+(dreamText.length>40?"...":""); ctx.fillText('"'+dt+'"',20,H-112);
         ctx.fillStyle="#ffd700";
         ctx.font="bold 13px 'Share Tech Mono',monospace";
         ctx.fillText("💰 재물운 "+(res.wealth||0)+"점  ❤️ 애정운 "+(res.love||0)+"점  ⭐ 성공운 "+(res.success||0)+"점",20,H-82);
