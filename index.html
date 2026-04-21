@@ -11,7 +11,17 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="DreamPick 6"/>
-<meta name="description" content="AI 꿈 해몽 + 오행 수리학 로또 번호 — DreamPick 6"/>
+<meta name="description" content="당신의 꿈을 부(Wealth)로 환산하는 AI 꿈 해몽 서비스 — DreamPick 6"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://www.dreampick6.com"/>
+<meta property="og:title" content="DreamPick 6"/>
+<meta property="og:description" content="당신의 꿈을 부(Wealth)로 환산하는&#10;AI 꿈 해몽 + 오행 수리학 로또 번호"/>
+<meta property="og:image" content="https://image.pollinations.ai/prompt/mystical%20moon%20app%20icon%20dark%20navy%20neon%20blue%20minimal?width=512&height=512&nologo=true&seed=6"/>
+<meta property="og:site_name" content="DreamPick 6"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="DreamPick 6"/>
+<meta name="twitter:description" content="당신의 꿈을 부(Wealth)로 환산하는 AI 꿈 해몽 서비스"/>
+<meta name="twitter:image" content="https://image.pollinations.ai/prompt/mystical%20moon%20app%20icon%20dark%20navy%20neon%20blue%20minimal?width=512&height=512&nologo=true&seed=6"/>
 <link rel="apple-touch-icon" href="https://image.pollinations.ai/prompt/mystical%20moon%20app%20icon%20dark%20navy%20neon%20blue%20minimal?width=180&height=180&nologo=true&seed=6"/>
 <link rel="manifest" href="data:application/json,{%22name%22:%22DreamPick%206%22,%22short_name%22:%22DreamPick%206%22,%22description%22:%22AI%20%EA%BF%88%20%ED%95%B4%EB%AA%BD%20%2B%20%EC%98%A4%ED%96%89%20%EC%88%98%EB%A6%AC%ED%95%99%20%EB%A1%9C%EB%98%90%20%EB%B2%88%ED%98%B8%22,%22start_url%22:%22/%22,%22display%22:%22standalone%22,%22background_color%22:%22%23020510%22,%22theme_color%22:%22%23020510%22,%22icons%22:[{%22src%22:%22https://image.pollinations.ai/prompt/mystical%20moon%20app%20icon%20dark%20navy%20neon%20blue%20minimal?width=192&height=192&nologo=true&seed=6%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22},{%22src%22:%22https://image.pollinations.ai/prompt/mystical%20moon%20app%20icon%20dark%20navy%20neon%20blue%20minimal?width=512&height=512&nologo=true&seed=6%22,%22sizes%22:%22512x512%22,%22type%22:%22image/png%22}]}"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
@@ -834,7 +844,8 @@ function BonusSets({sets}){
   const show=(m)=>{setToast(m);setTimeout(()=>setToast(""),2800);};
 
   // 이미지를 Canvas에 운세 정보 합성해서 반환
-  const buildCanvas=()=>new Promise((resolve,reject)=>{
+  // 캔버스 생성 (withInfo: 꿈텍스트+점수+번호 포함 여부)
+  const buildCanvas=(withInfo)=>new Promise((resolve,reject)=>{
     if(!dreamImg){reject(new Error("no image"));return;}
     const img=new Image();
     img.crossOrigin="anonymous";
@@ -843,25 +854,27 @@ function BonusSets({sets}){
       const cv=document.createElement("canvas");cv.width=W;cv.height=H;
       const ctx=cv.getContext("2d");
       ctx.drawImage(img,0,0,W,H);
-      // 하단 그라디언트
-      const grad=ctx.createLinearGradient(0,H*0.45,0,H);
-      grad.addColorStop(0,"rgba(2,5,16,0)");
-      grad.addColorStop(1,"rgba(2,5,16,0.96)");
-      ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
-      // 꿈 텍스트
-      ctx.fillStyle="rgba(232,244,255,0.88)";
-      ctx.font="italic 14px 'Noto Sans KR',sans-serif";
-      ctx.fillText('"'+(dreamText||"").slice(0,40)+(dreamText.length>40?"...":"")+'"',20,H-110);
-      // 운세 점수
-      ctx.fillStyle="#ffd700";
-      ctx.font="bold 13px 'Share Tech Mono',monospace";
-      ctx.fillText("💰 재물운 "+(res.wealth||0)+"점  ❤️ 애정운 "+(res.love||0)+"점  ⭐ 성공운 "+(res.success||0)+"점",20,H-82);
-      // Lucky 번호
-      ctx.fillStyle="#00d4ff";
-      ctx.font="bold 14px 'Orbitron',monospace";
-      ctx.fillText("LUCKY 6 : "+((res.lucky_numbers||[]).join("  ·  ")),20,H-52);
-      // 브랜드
-      ctx.fillStyle="rgba(0,212,255,0.6)";
+      if(withInfo){
+        const grad=ctx.createLinearGradient(0,H*0.42,0,H);
+        grad.addColorStop(0,"rgba(2,5,16,0)");
+        grad.addColorStop(1,"rgba(2,5,16,0.97)");
+        ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+        ctx.fillStyle="rgba(232,244,255,0.85)";
+        ctx.font="italic 14px 'Noto Sans KR',sans-serif";
+        ctx.fillText('"\'+(dreamText||"").slice(0,40)+(dreamText.length>40?"...":"")+'"',20,H-112);
+        ctx.fillStyle="#ffd700";
+        ctx.font="bold 13px 'Share Tech Mono',monospace";
+        ctx.fillText("💰 재물운 "+(res.wealth||0)+"점  ❤️ 애정운 "+(res.love||0)+"점  ⭐ 성공운 "+(res.success||0)+"점",20,H-82);
+        ctx.fillStyle="#00d4ff";
+        ctx.font="bold 15px 'Orbitron',monospace";
+        ctx.fillText("LUCKY 6 : "+((res.lucky_numbers||[]).join("  ·  ")),20,H-52);
+      } else {
+        const grad=ctx.createLinearGradient(0,H*0.8,0,H);
+        grad.addColorStop(0,"rgba(2,5,16,0)");
+        grad.addColorStop(1,"rgba(2,5,16,0.75)");
+        ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+      }
+      ctx.fillStyle="rgba(0,212,255,0.7)";
       ctx.font="11px 'Share Tech Mono',monospace";
       ctx.fillText("DreamPick 6 · dreampick6.com",20,H-22);
       resolve(cv);
@@ -870,19 +883,17 @@ function BonusSets({sets}){
     img.src=dreamImg;
   });
 
-  // 📸 클릭 → 이미지 모달 띄우기
   const openImgModal=async()=>{
     if(dreamImg){
       try{
         show("📸 이미지 준비 중...");
-        const cv=await buildCanvas();
+        const cv=await buildCanvas(true);
         setImgModal({src:cv.toDataURL("image/png"),filename:"dreampick6-"+Date.now()+".png"});
         setToast("");
       }catch{
         show("⚠️ 이미지 로드 실패 · 이미지를 길게 눌러 저장해보세요");
       }
     } else {
-      // AI 이미지 없을 때 html2canvas
       const card=cardRef?.current;
       if(!card){show("⚠️ 카드를 먼저 불러와 주세요");return;}
       try{
@@ -898,7 +909,6 @@ function BonusSets({sets}){
     }
   };
 
-  // 다운로드
   const downloadImg=()=>{
     if(!imgModal)return;
     const a=document.createElement("a");a.download=imgModal.filename;a.href=imgModal.src;a.click();
@@ -906,16 +916,14 @@ function BonusSets({sets}){
     setImgModal(null);
   };
 
-  // 카카오톡 공유 (운세+번호 포함)
+  // 카카오톡: 꿈/번호 없이 순수 이미지 + 브랜드 문구만
   const shareKakao=async()=>{
-    const lucky=(res.lucky_numbers||[]).join(", ");
-    const title="🌙 내 꿈 해몽 결과 — DreamPick 6";
-    const desc=`💰 재물운 ${res.wealth}점  ❤️ 애정운 ${res.love}점  ⭐ 성공운 ${res.success}점\n🎱 Lucky 6 : ${lucky}\n\n${(dreamText||"").slice(0,30)}...\n\ndreampick6.com`;
+    const title="DreamPick 6";
+    const desc="당신의 꿈을 부(Wealth)로 환산하는\nAI 꿈 해몽 + 오행 수리학 로또 번호\ndreampick6.com";
     if(navigator.share){
-      // 이미지 파일도 함께 공유 시도
       if(dreamImg){
         try{
-          const cv=await buildCanvas();
+          const cv=await buildCanvas(false);
           cv.toBlob(async(blob)=>{
             const file=new File([blob],"dreampick6.png",{type:"image/png"});
             if(navigator.canShare&&navigator.canShare({files:[file]})){
