@@ -865,9 +865,22 @@ function BonusSets({sets}){
         if(l1)ctx.fillText(l1,20,H-118);
         if(l2)ctx.fillText(l2,20,H-98);
         if(l3)ctx.fillText(l3,20,H-78);
-        ctx.fillStyle="#00d4ff";
-        ctx.font="bold 14px 'Orbitron',monospace";
-        ctx.fillText("LUCKY 6 : "+((res.lucky_numbers||[]).join("  ·  ")),20,H-52);
+        // LUCKY 6 레이블 (흰색)
+        ctx.fillStyle="rgba(255,255,255,0.9)";
+        ctx.font="bold 12px 'Share Tech Mono',monospace";
+        ctx.fillText("LUCKY  6",20,H-52);
+        // 번호들 (골드색, 간격 넓게)
+        ctx.fillStyle="#ffd700";
+        ctx.font="bold 15px 'Orbitron',monospace";
+        const nums=(res.lucky_numbers||[]);
+        const labelW=ctx.measureText("LUCKY  6").width;
+        let nx=20+labelW+18;
+        nums.forEach((n,i)=>{
+          const ns=String(n).padStart(2,"0");
+          ctx.fillText(ns,nx,H-52);
+          nx+=ctx.measureText(ns).width+20;
+          if(i<nums.length-1){ctx.fillStyle="rgba(255,215,0,0.4)";ctx.fillText("·",nx-12,H-52);ctx.fillStyle="#ffd700";}
+        });
       } else {
         const grad=ctx.createLinearGradient(0,H*0.8,0,H);
         grad.addColorStop(0,"rgba(2,5,16,0)");
@@ -1362,25 +1375,45 @@ function PWAInstall(){
           <div className="ios-box" onClick={e=>e.stopPropagation()}>
             <div className="ios-title">🌙 DreamPick 6 설치하기</div>
             <div className="ios-sub">
-              아이폰은 아래 3단계로 홈 화면에 앱을 추가할 수 있어요
+              아이폰은 아래 방법으로 홈 화면에 앱을 추가할 수 있어요
               <br/>
               <span style={{fontSize:".7rem",color:"rgba(0,212,255,0.6)"}}>Safari 브라우저에서만 가능합니다</span>
             </div>
             <div className="ios-steps">
               <div className="ios-step">
                 <div className="ios-num">1</div>
-                <div className="ios-step-icon">📤</div>
+                <div className="ios-step-icon">
+                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="1" y="1" width="26" height="26" rx="6" fill="rgba(0,212,255,0.15)" stroke="rgba(0,212,255,0.5)" strokeWidth="1.5"/>
+                    <rect x="8" y="14" width="12" height="9" rx="2" fill="none" stroke="rgba(0,212,255,0.8)" strokeWidth="1.5"/>
+                    <line x1="14" y1="4" x2="14" y2="15" stroke="rgba(0,212,255,0.8)" strokeWidth="1.5" strokeLinecap="round"/>
+                    <polyline points="10,8 14,4 18,8" fill="none" stroke="rgba(0,212,255,0.8)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
                 <div className="ios-step-text">
-                  하단 가운데 <b>공유 버튼</b>을 탭하세요
+                  화면 맨 아래 <b>오른쪽 끝</b>의 <b>... (더보기)</b> 버튼을 탭하세요
                   <br/>
-                  <span style={{fontSize:".72rem",color:"var(--dim)"}}>사각형에 위쪽 화살표 아이콘</span>
+                  <span style={{fontSize:".72rem",color:"var(--dim)"}}>또는 주소창 옆 <b style={{color:"rgba(0,212,255,0.8)"}}>⬆ 공유 아이콘</b>을 탭하세요</span>
+                  <div style={{marginTop:6,padding:"6px 10px",background:"rgba(0,212,255,0.08)",borderRadius:8,border:"1px solid rgba(0,212,255,0.2)",fontSize:".7rem",color:"var(--dim)",lineHeight:1.6}}>
+                    💡 Safari 하단 툴바의 오른쪽 끝 <b style={{color:"var(--tx)"}}>···</b> 버튼이에요
+                    <br/>
+                    공유 아이콘(위쪽 화살표 모양)이 보이면 그걸 탭해도 돼요
+                  </div>
                 </div>
               </div>
               <div className="ios-step">
                 <div className="ios-num">2</div>
-                <div className="ios-step-icon">➕</div>
+                <div className="ios-step-icon">
+                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="1" y="1" width="26" height="26" rx="6" fill="rgba(0,212,255,0.15)" stroke="rgba(0,212,255,0.5)" strokeWidth="1.5"/>
+                    <line x1="14" y1="7" x2="14" y2="21" stroke="rgba(0,212,255,0.8)" strokeWidth="2" strokeLinecap="round"/>
+                    <line x1="7" y1="14" x2="21" y2="14" stroke="rgba(0,212,255,0.8)" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </div>
                 <div className="ios-step-text">
-                  메뉴를 스크롤해서 <b>홈 화면에 추가</b>를 탭하세요
+                  목록을 위로 스크롤해서 <b>홈 화면에 추가</b>를 탭하세요
+                  <br/>
+                  <span style={{fontSize:".72rem",color:"var(--dim)"}}>사각형 + 아이콘이 붙어 있는 메뉴예요</span>
                 </div>
               </div>
               <div className="ios-step">
