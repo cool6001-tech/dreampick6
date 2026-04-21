@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="DreamPick 6"/>
-<meta name="description" content="당신의 꿈을 부(Wealth)로 환산하는 AI 꿈 해몽 서비스 — DreamPick 6"/>
+<meta name="description" content="어젯밤 그 꿈, 그냥 넘기실 건가요? 당신의 꿈 속 숨겨진 행운의 로또 시그널을 확인하세요!"/>
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://www.dreampick6.com"/>
 <meta property="og:title" content="DreamPick 6"/>
@@ -140,7 +140,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:'Noto Sans KR',sans-s
 @keyframes bk{50%{opacity:0;}}
 /* 공유 패널 */
 .sp{background:var(--panel);border:1px solid rgba(0,212,255,.2);border-radius:14px;padding:16px 18px;margin-bottom:14px;position:relative;}
-.sb{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.sb{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;}
 @media(max-width:480px){.sb{grid-template-columns:1fr;}}
 .sbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:12px 7px;border-radius:10px;cursor:pointer;border:1px solid rgba(255,255,255,.08);background:var(--card);transition:all .25s;user-select:none;}
 .sbtn:hover{transform:translateY(-2px);}
@@ -840,11 +840,10 @@ function BonusSets({sets}){
   );
 }function SharePanel({res,dreamText,artType,artSeed,cardRef,dreamImg}){
   const [toast,setToast]=useState("");
-  const [imgModal,setImgModal]=useState(null); // {src, filename}
+  const [imgModal,setImgModal]=useState(null);
   const show=(m)=>{setToast(m);setTimeout(()=>setToast(""),2800);};
+  const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  // 이미지를 Canvas에 운세 정보 합성해서 반환
-  // 캔버스 생성 (withInfo: 꿈텍스트+점수+번호 포함 여부)
   const buildCanvas=(withInfo)=>new Promise((resolve,reject)=>{
     if(!dreamImg){reject(new Error("no image"));return;}
     const img=new Image();
@@ -891,9 +890,7 @@ function BonusSets({sets}){
         const cv=await buildCanvas(true);
         setImgModal({src:cv.toDataURL("image/png"),filename:"dreampick6-"+Date.now()+".png"});
         setToast("");
-      }catch{
-        show("⚠️ 이미지 로드 실패 · 이미지를 길게 눌러 저장해보세요");
-      }
+      }catch{ show("⚠️ 이미지를 길게 눌러 저장해보세요"); }
     } else {
       const card=cardRef?.current;
       if(!card){show("⚠️ 카드를 먼저 불러와 주세요");return;}
@@ -917,16 +914,11 @@ function BonusSets({sets}){
     setImgModal(null);
   };
 
-  // 카카오톡: 꿈/번호 없이 순수 이미지 + 브랜드 문구만
   const shareKakao=async()=>{
     const title="DreamPick 6";
     const desc="어젯밤 그 꿈, 그냥 넘기실 건가요?\n당신의 꿈 속 숨겨진 행운의 로또 시그널을 확인하세요!\ndreampick6.com";
     const url=window.location.href;
-    // 모바일 여부 판단 (터치 + 좁은 화면)
-    const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-    if(isMobile && navigator.share){
-      // 모바일: 이미지 파일 포함 공유
+    if(isMobile&&navigator.share){
       if(dreamImg){
         try{
           const cv=await buildCanvas(false);
@@ -938,19 +930,14 @@ function BonusSets({sets}){
               await navigator.share({title,text:desc,url}).catch(()=>{});
             }
           },"image/png");
-        }catch{
-          navigator.share({title,text:desc,url}).catch(()=>{});
-        }
+        }catch{ navigator.share({title,text:desc,url}).catch(()=>{}); }
       } else {
         navigator.share({title,text:desc,url}).catch(()=>{});
       }
       show("💛 카카오톡으로 공유합니다");
     } else {
-      // 데스크탑: 링크 복사 + 카카오톡 안내
       const copyText=desc+"\n\n"+url;
-      if(navigator.clipboard){
-        await navigator.clipboard.writeText(copyText).catch(()=>{});
-      }
+      if(navigator.clipboard) await navigator.clipboard.writeText(copyText).catch(()=>{});
       show("📋 링크가 복사됐어요! 카카오톡에 붙여넣기 하세요");
     }
   };
@@ -960,9 +947,9 @@ function BonusSets({sets}){
       <div className="sp">
         <div className="cd tl"/><div className="cd tr"/>
         <div className="pl">결과 저장 & 공유</div>
-        <div className="sb">
+        <div className="sb" style={{gridTemplateColumns:"1fr 1fr"}}>
           <div className="sbtn pg" onClick={openImgModal}><span className="si">📸</span><span className="sl3">이미지 보기<br/>& 저장하기</span></div>
-          <div className="sbtn kk" onClick={shareKakao}><span className="si">💛</span><span className="sl3">{/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)?"카카오톡":"링크 복사"}<br/>{"& 카카오 전달"}</span></div>
+          <div className="sbtn kk" onClick={shareKakao}><span className="si">💛</span><span className="sl3">{isMobile?"카카오톡":"링크 복사"}<br/>{"카카오 전달"}</span></div>
         </div>
       </div>
       {imgModal&&(
@@ -972,7 +959,8 @@ function BonusSets({sets}){
             <img className="img-modal-img" src={imgModal.src} alt="dream"/>
             <button className="img-modal-dl" onClick={downloadImg}>⬇ 저장하기</button>
             <div style={{fontSize:".62rem",color:"rgba(232,244,255,0.45)",textAlign:"center",fontFamily:"'Share Tech Mono',monospace",lineHeight:1.8}}>
-              📱 아이폰: 이미지를 <b style={{color:"rgba(0,212,255,0.7)"}}>꾹 눌러서</b> → <b style={{color:"rgba(0,212,255,0.7)"}}>사진 저장</b><br/>
+              📱 아이폰: 이미지를 꾹 눌러서 사진 저장
+              <br/>
               🤖 안드로이드: 위 버튼 클릭 시 갤러리에 저장
             </div>
           </div>
@@ -1235,8 +1223,8 @@ async function generateDreamImage(prompt) {
     const d = await r.json();
     if (d.data?.[0]?.url) return d.data[0].url;
   }
-  // 무료 대안: Pollinations.ai (지브리 스타일 적용)
-  const ghibliPrompt = "Studio Ghibli anime style, hand-drawn watercolor illustration, soft warm colors, magical dreamy atmosphere, Hayao Miyazaki inspired, detailed background, gentle lighting, peaceful and beautiful, " + prompt;
+  // 무료 대안: Pollinations.ai
+  const ghibliPrompt="Studio Ghibli anime style, hand-drawn watercolor, soft warm colors, magical dreamy atmosphere, Miyazaki inspired, peaceful and beautiful, "+prompt;
   return "https://image.pollinations.ai/prompt/"+encodeURIComponent(ghibliPrompt)
     +"?width=768&height=512&nologo=true&seed="+Math.floor(Math.random()*9999);
 }
@@ -1269,11 +1257,10 @@ number_reasons 작성: 각 번호마다 오행 배속 근거 + 꿈 연결 이유
 art_type: 물/강/비→water, 불/화재/태양→fire, 금/보석/동전→gold, 하늘/날기/구름→sky, 숲/흙/나무→earth, 그외→default
 
 image_prompt 규칙:
-1. 지브리 스튜디오 감성으로 따뜻하고 아름답게 표현
-2. 무서운 꿈도 반드시 평화롭고 희망적으로 재해석
-3. 꿈의 핵심 장면을 묘사, 자연/하늘/빛 요소 적극 활용
-4. 사람 등장 시 온화하고 밝은 표정, 어둡거나 불안한 요소 절대 금지
-5. 영어로 작성, 50자 이내로 간결하게`;
+1. 따뜻하고 치유적·희망적 분위기, 무서운 꿈도 긍정적 재해석
+2. 동양적 감성 (한옥, 한복, 수묵화 느낌)
+3. soft watercolor, dreamy pastel, ethereal glow, cinematic lighting
+4. 사람 등장 시 온화하고 밝은 표정, 어둡거나 불안한 요소 절대 금지`;
 
 /* ── PWA 설치 컴포넌트 ── */
 function PWAInstall(){
@@ -1289,12 +1276,12 @@ function PWAInstall(){
     if(window.matchMedia('(display-mode: standalone)').matches){
       setIsInstalled(true); return;
     }
+    if(localStorage.getItem('pwa_dismissed')) return;
 
     // iOS 감지
     const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
     setIsIOS(ios);
 
-    // Android: beforeinstallprompt는 항상 캡처 (dismissed 여부 무관)
     if(!ios){
       window.addEventListener('beforeinstallprompt', (e)=>{
         e.preventDefault();
@@ -1305,16 +1292,12 @@ function PWAInstall(){
         setShowBanner(false);
       });
     }
-
-    const showIt = ()=>{
+    const showIt=()=>{
       if(localStorage.getItem('pwa_dismissed')) return;
       setShowBanner(true);
     };
-    // iOS 모달 직접 열기 이벤트
-    const showIOSModal = ()=>{ setShowIOS(true); };
+    const showIOSModal=()=>{ setShowIOS(true); };
     window.addEventListener('show-ios-install', showIOSModal);
-
-    // 자동 표시: dismissed 아니고 동의한 경우 3초 후
     if(!localStorage.getItem('pwa_dismissed') && localStorage.getItem('dp6_agreed')){
       setTimeout(showIt, 3000);
     } else if(!localStorage.getItem('pwa_dismissed')){
@@ -1335,12 +1318,11 @@ function PWAInstall(){
     if(deferredPrompt){
       deferredPrompt.prompt();
       const result = await deferredPrompt.userChoice;
-      if(result.outcome === 'accepted') setIsInstalled(true);
+      if(result.outcome==='accepted') setIsInstalled(true);
       setDeferredPrompt(null);
       handleDismiss();
     } else {
-      // deferredPrompt 없으면 (이미 설치됐거나 Chrome 아닌 경우) 안내
-      alert("브라우저 메뉴(⋮) → "홈 화면에 추가"를 선택해 주세요!");
+      alert('브라우저 메뉴(⋮) → 홈 화면에 추가를 선택해 주세요!');
       handleDismiss();
     }
   };
@@ -1360,7 +1342,7 @@ function PWAInstall(){
         <div className={"pwa-banner"+(bannerHide?" hide":"")}>
           <div className="pwa-icon">🌙</div>
           <div className="pwa-text">
-            <div className="pwa-title">📲 앱으로 설치하기</div>
+            <div className="pwa-title">앱으로 설치하기</div>
             <div className="pwa-desc">
               홈 화면에 추가하면 <span>앱처럼 바로 실행</span>됩니다
             </div>
@@ -1380,33 +1362,34 @@ function PWAInstall(){
           <div className="ios-box" onClick={e=>e.stopPropagation()}>
             <div className="ios-title">🌙 DreamPick 6 설치하기</div>
             <div className="ios-sub">
-              아이폰은 아래 3단계로 홈 화면에 앱을 추가할 수 있어요<br/>
-              <span style={{fontSize:".7rem",color:"rgba(0,212,255,0.6)"}}>※ Safari 브라우저에서만 가능합니다</span>
+              아이폰은 아래 3단계로 홈 화면에 앱을 추가할 수 있어요
+              <br/>
+              <span style={{fontSize:".7rem",color:"rgba(0,212,255,0.6)"}}>Safari 브라우저에서만 가능합니다</span>
             </div>
             <div className="ios-steps">
               <div className="ios-step">
                 <div className="ios-num">1</div>
                 <div className="ios-step-icon">📤</div>
                 <div className="ios-step-text">
-                  하단 가운데 <b>공유 버튼</b>을 탭하세요<br/>
-                  <span style={{fontSize:".72rem",color:"var(--dim)",display:"flex",alignItems:"center",gap:4,marginTop:3}}>
-                    <span style={{fontSize:"1.1rem"}}>⬜</span> 사각형에 위쪽 화살표 아이콘
-                  </span>
+                  하단 가운데 <b>공유 버튼</b>을 탭하세요
+                  <br/>
+                  <span style={{fontSize:".72rem",color:"var(--dim)"}}>사각형에 위쪽 화살표 아이콘</span>
                 </div>
               </div>
               <div className="ios-step">
                 <div className="ios-num">2</div>
                 <div className="ios-step-icon">➕</div>
                 <div className="ios-step-text">
-                  메뉴를 스크롤해서 <b style={{color:"var(--az)"}}>"홈 화면에 추가"</b> 탭
+                  메뉴를 스크롤해서 <b>홈 화면에 추가</b>를 탭하세요
                 </div>
               </div>
               <div className="ios-step">
                 <div className="ios-num">3</div>
                 <div className="ios-step-icon">✅</div>
                 <div className="ios-step-text">
-                  오른쪽 위 <b style={{color:"var(--az)"}}>"추가"</b> 탭 → 설치 완료!<br/>
-                  <span style={{fontSize:".72rem",color:"var(--dim)"}}>홈 화면에 🌙 DreamPick 6 아이콘이 생겨요</span>
+                  오른쪽 위 <b>추가</b>를 탭하면 설치 완료!
+                  <br/>
+                  <span style={{fontSize:".72rem",color:"var(--dim)"}}>홈 화면에 DreamPick 6 아이콘이 생겨요 🌙</span>
                 </div>
               </div>
             </div>
@@ -1523,14 +1506,11 @@ const d=await r.json();
           {!window.matchMedia('(display-mode: standalone)').matches&&(
             <div style={{display:"flex",justifyContent:"center",marginTop:6}}>
               <button className="pwa-header-btn" onClick={()=>{
+                const e=new Event('show-pwa-banner');window.dispatchEvent(e);
+                // iOS 감지
                 const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.MSStream;
-                if(ios){
-                  window.dispatchEvent(new Event('show-ios-install'));
-                } else {
-                  // Android: dismissed 초기화 후 배너 표시
-                  localStorage.removeItem('pwa_dismissed');
-                  window.dispatchEvent(new Event('show-pwa-banner'));
-                }
+                if(ios){document.getElementById('ios-guide-trigger')?.click();}
+                else{localStorage.removeItem('pwa_dismissed');window.location.reload();}
               }}>
                 <div className="pwa-dot"/>
                 📲 홈 화면에 앱으로 추가하기
