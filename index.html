@@ -570,7 +570,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:'Noto Sans KR',sans-s
 .img-modal-bg{position:fixed;inset:0;z-index:9000;background:rgba(2,5,16,0.92);display:flex;align-items:center;justify-content:center;animation:fi .25s ease;}
 .img-modal-box{position:relative;max-width:92vw;max-height:90vh;display:flex;flex-direction:column;align-items:center;gap:14px;}
 .img-modal-img{max-width:100%;max-height:70vh;border-radius:14px;box-shadow:0 0 40px rgba(0,212,255,0.25);}
-.img-modal-dl{padding:11px 32px;background:var(--az);color:#020510;border:none;border-radius:10px;font-family:'Orbitron',monospace;font-size:.78rem;font-weight:700;letter-spacing:.12em;cursor:pointer;transition:all .2s;}
+.img-modal-dl{padding:13px 0;background:var(--az);color:#020510;border:none;border-radius:10px;font-family:'Orbitron',monospace;font-size:.78rem;font-weight:700;letter-spacing:.12em;cursor:pointer;transition:all .2s;width:100%;text-align:center;}
 .img-modal-dl:hover{background:#fff;box-shadow:0 0 20px rgba(0,212,255,0.5);}
 .img-modal-close{position:absolute;top:-14px;right:-14px;width:30px;height:30px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.8rem;color:var(--tx);}
 </style>
@@ -855,18 +855,19 @@ function BonusSets({sets}){
       const ctx=cv.getContext("2d");
       ctx.drawImage(img,0,0,W,H);
       if(withInfo){
-        const grad=ctx.createLinearGradient(0,H*0.42,0,H);
+        const grad=ctx.createLinearGradient(0,H*0.33,0,H);
         grad.addColorStop(0,"rgba(2,5,16,0)");
         grad.addColorStop(1,"rgba(2,5,16,0.97)");
         ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
-        ctx.fillStyle="rgba(232,244,255,0.85)";
-        ctx.font="italic 14px 'Noto Sans KR',sans-serif";
-        const dt=(dreamText||"").slice(0,40)+(dreamText.length>40?"...":""); ctx.fillText('"'+dt+'"',20,H-112);
-        ctx.fillStyle="#ffd700";
-        ctx.font="bold 13px 'Share Tech Mono',monospace";
-        ctx.fillText("💰 재물운 "+(res.wealth||0)+"점  ❤️ 애정운 "+(res.love||0)+"점  ⭐ 성공운 "+(res.success||0)+"점",20,H-82);
+        const ip=(res.interpretation||"");
+        const l1=ip.slice(0,40),l2=ip.slice(40,80),l3=ip.slice(80,116)+(ip.length>116?"...":"");
+        ctx.fillStyle="rgba(232,244,255,0.88)";
+        ctx.font="13px 'Noto Sans KR',sans-serif";
+        if(l1)ctx.fillText(l1,20,H-118);
+        if(l2)ctx.fillText(l2,20,H-98);
+        if(l3)ctx.fillText(l3,20,H-78);
         ctx.fillStyle="#00d4ff";
-        ctx.font="bold 15px 'Orbitron',monospace";
+        ctx.font="bold 14px 'Orbitron',monospace";
         ctx.fillText("LUCKY 6 : "+((res.lucky_numbers||[]).join("  ·  ")),20,H-52);
       } else {
         const grad=ctx.createLinearGradient(0,H*0.8,0,H);
@@ -959,7 +960,11 @@ function BonusSets({sets}){
           <div className="img-modal-box" onClick={e=>e.stopPropagation()}>
             <div className="img-modal-close" onClick={()=>setImgModal(null)}>✕</div>
             <img className="img-modal-img" src={imgModal.src} alt="dream"/>
-            <button className="img-modal-dl" onClick={downloadImg}>⬇ 이미지 다운로드</button>
+            <button className="img-modal-dl" onClick={downloadImg}>⬇ 사진첩에 저장하기</button>
+            <div style={{fontSize:".62rem",color:"rgba(232,244,255,0.45)",textAlign:"center",fontFamily:"'Share Tech Mono',monospace",lineHeight:1.8}}>
+              📱 아이폰: 이미지를 <b style={{color:"rgba(0,212,255,0.7)"}}>꾹 눌러서</b> → <b style={{color:"rgba(0,212,255,0.7)"}}>사진 저장</b><br/>
+              🤖 안드로이드: 위 버튼 클릭 시 갤러리에 저장
+            </div>
           </div>
         </div>
       )}
