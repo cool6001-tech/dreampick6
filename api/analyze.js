@@ -25,9 +25,38 @@ export default async function handler(req, res) {
 3. 상생오행 수 계열에서 2개 선택
 4. 꿈 속 핵심 요소(사람→土, 동물→木, 하늘·빛→火, 물·비→水, 금속·보석→金)의 오행에서 2개 추가
 5. 6개 모두 1~45 범위, 중복 없이 확정
+6. number_reasons는 반드시 6개 객체 배열 (lucky_numbers의 각 번호마다 1개씩)
+7. bonus_sets는 반드시 정확히 4개 세트
 
-출력 JSON:
-{"wealth":재물운0~100정수,"love":애정운0~100정수,"success":성공운0~100정수,"prob":로또당첨확률0~100정수,"lucky_numbers":[1~45중복없는6개정수],"number_reasons":[{"keyword":"오행·키워드 2~4자","reason":"오행 수리학 근거 포함 2~3문장"},{"keyword":"...","reason":"..."},{"keyword":"...","reason":"..."},{"keyword":"...","reason":"..."},{"keyword":"...","reason":"..."},{"keyword":"...","reason":"..."}],"bonus_sets":[{"label":"오행 순환 균형 선택","numbers":[6개정수],"desc":"상생 오행 기준 보조 번호 세트 설명 1문장"},{"label":"순판수 오행 균형","numbers":[6개정수],"desc":"순환수 기준 보조 번호 세트 설명 1문장"},{"label":"오행 순환 선택","numbers":[6개정수],"desc":"오행 순환 기준 보조 번호 세트 설명 1문장"},{"label":"순판수 오행 선택","numbers":[6개정수],"desc":"다양성 기준 보조 번호 세트 설명 1문장"}],"interpretation":"한국어200~300자","art_type":"water|fire|gold|sky|earth|default","image_prompt":"영어 이미지 프롬프트 100자 이내","ohaeng_info":{"main":"주오행 한자+한글","reason":"이 꿈이 해당 오행으로 분류된 이유 1~2문장"}}
+★ number_reasons는 반드시 lucky_numbers의 각 번호에 대응하는 6개 항목을 작성하세요. 절대 6개 미만으로 줄이지 마세요.
+★ bonus_sets는 반드시 정확히 4개만 작성하세요. 4개 초과 금지.
+
+출력 JSON 형식 (이 형식 그대로, 6개 reasons, 4개 bonus_sets):
+{
+  "wealth": 재물운0~100정수,
+  "love": 애정운0~100정수,
+  "success": 성공운0~100정수,
+  "prob": 로또당첨확률0~100정수,
+  "lucky_numbers": [번호1,번호2,번호3,번호4,번호5,번호6],
+  "number_reasons": [
+    {"keyword":"오행키워드","reason":"번호1 근거 2~3문장"},
+    {"keyword":"오행키워드","reason":"번호2 근거 2~3문장"},
+    {"keyword":"오행키워드","reason":"번호3 근거 2~3문장"},
+    {"keyword":"오행키워드","reason":"번호4 근거 2~3문장"},
+    {"keyword":"오행키워드","reason":"번호5 근거 2~3문장"},
+    {"keyword":"오행키워드","reason":"번호6 근거 2~3문장"}
+  ],
+  "bonus_sets": [
+    {"label":"오행 순환 균형 선택","numbers":[번호1,번호2,번호3,번호4,번호5,번호6],"desc":"설명 1문장"},
+    {"label":"순판수 오행 균형","numbers":[번호1,번호2,번호3,번호4,번호5,번호6],"desc":"설명 1문장"},
+    {"label":"오행 순환 선택","numbers":[번호1,번호2,번호3,번호4,번호5,번호6],"desc":"설명 1문장"},
+    {"label":"순판수 오행 선택","numbers":[번호1,번호2,번호3,번호4,번호5,번호6],"desc":"설명 1문장"}
+  ],
+  "interpretation": "한국어 200~300자 꿈 해석",
+  "art_type": "water|fire|gold|sky|earth|default",
+  "image_prompt": "영어 50자 이내 이미지 프롬프트",
+  "ohaeng_info": {"main":"주오행 한자+한글","reason":"1~2문장"}
+}
 
 art_type: 물/강/비→water, 불/화재/태양→fire, 금/보석/동전→gold, 하늘/날기/구름→sky, 숲/흙/나무→earth, 그외→default
 
@@ -48,7 +77,7 @@ image_prompt 규칙:
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 2000,
+        max_tokens: 2500,
         system: SYS,
         messages: [{ role: 'user', content: dream }]
       })
