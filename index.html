@@ -1199,18 +1199,15 @@ function PWAInstall(){
   const [isIOS, setIsIOS] = React.useState(false);
 
   React.useEffect(()=>{
+    // 이미 설치된 경우 숨김
     if(window.matchMedia('(display-mode: standalone)').matches){
       setIsInstalled(true); return;
     }
     if(sessionStorage.getItem('pwa_dismissed')) return;
 
+    // iOS 감지
     const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
     setIsIOS(ios);
-
-    const showIt = ()=>{
-      if(sessionStorage.getItem('pwa_dismissed')) return;
-      setShowBanner(true);
-    };
 
     if(!ios){
       window.addEventListener('beforeinstallprompt', (e)=>{
@@ -1223,7 +1220,12 @@ function PWAInstall(){
       });
     }
 
-    // 이미 동의한 경우 3초 후 자동 표시, 아닌 경우 동의 후 이벤트 대기
+    const showIt = ()=>{
+      if(sessionStorage.getItem('pwa_dismissed')) return;
+      setShowBanner(true);
+    };
+
+    // 이미 동의한 경우 3초 후 표시, 아니면 동의 이벤트 대기
     if(sessionStorage.getItem('dp6_agreed')){
       setTimeout(showIt, 3000);
     } else {
@@ -1321,6 +1323,7 @@ function PWAInstall(){
 function App(){
   const [txt,setTxt]=useState("");
   const [loading,setLoading]=useState(false);
+  const [hasAnalyzed,setHasAnalyzed]=useState(false);
   const [res,setRes]=useState(null);
   const [journal,setJournal]=useState(SAMPLES);
   const [err,setErr]=useState("");
@@ -1370,7 +1373,7 @@ function App(){
     setShowOv(false);setShowCard(false);setCurTxt(txt);setDreamImg(null);
     try{
       // 1) Claude 해몽 분석
-      const r=await fetch("http://localhost:8080/analyze",{
+      const r=await fetch("/api/analyze",{
     method:"POST",headers:{"Content-Type":"application/json"},
     body:JSON.stringify({dream:txt})
 });
@@ -1396,7 +1399,7 @@ const d=await r.json();
           .finally(()=>setImgLoading(false));
       }
     }catch(e){setErr("회로 오류: "+e.message);}
-    finally{setLoading(false);}
+    finally{setLoading(false);setHasAnalyzed(true);}
   };
 
   return(
@@ -1440,7 +1443,7 @@ const d=await r.json();
           <textarea className="ta" placeholder="꿈의 내용을 자세히 입력하세요... (예: 강에서 큰 잉어를 잡았는데 용이 되어 하늘로 날아갔어요)" value={txt} onChange={e=>setTxt(e.target.value)} disabled={loading}/>
           <button className="btn" onClick={analyze} disabled={loading||!txt.trim()}>
             {loading&&<div className="cl"/>}
-            {loading?<span className="ld">회로 분석중<span>.</span><span>.</span><span>.</span></span>:"⚡ 꿈 분석하기 · ANALYZE"}
+            {loading?<span className="ld">회로 분석중<span>.</span><span>.</span><span>.</span></span>:hasAnalyzed?"🔄 꿈 다시 분석하기 · RE-ANALYZE":"⚡ 꿈 분석하기 · ANALYZE"}
           </button>
           {err&&<div className="et">{err}</div>}
         </div>
