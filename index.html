@@ -130,7 +130,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:'Noto Sans KR',sans-s
 @keyframes bk{50%{opacity:0;}}
 /* 공유 패널 */
 .sp{background:var(--panel);border:1px solid rgba(0,212,255,.2);border-radius:14px;padding:16px 18px;margin-bottom:14px;position:relative;}
-.sb{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;}
+.sb{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
 @media(max-width:480px){.sb{grid-template-columns:1fr;}}
 .sbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:12px 7px;border-radius:10px;cursor:pointer;border:1px solid rgba(255,255,255,.08);background:var(--card);transition:all .25s;user-select:none;}
 .sbtn:hover{transform:translateY(-2px);}
@@ -555,6 +555,14 @@ html,body{background:var(--bg);color:var(--tx);font-family:'Noto Sans KR',sans-s
 
 /* 패널 여백 */
 .p { padding: 20px; margin-bottom: 16px; }
+
+/* 이미지 미리보기 모달 */
+.img-modal-bg{position:fixed;inset:0;z-index:9000;background:rgba(2,5,16,0.92);display:flex;align-items:center;justify-content:center;animation:fi .25s ease;}
+.img-modal-box{position:relative;max-width:92vw;max-height:90vh;display:flex;flex-direction:column;align-items:center;gap:14px;}
+.img-modal-img{max-width:100%;max-height:70vh;border-radius:14px;box-shadow:0 0 40px rgba(0,212,255,0.25);}
+.img-modal-dl{padding:11px 32px;background:var(--az);color:#020510;border:none;border-radius:10px;font-family:'Orbitron',monospace;font-size:.78rem;font-weight:700;letter-spacing:.12em;cursor:pointer;transition:all .2s;}
+.img-modal-dl:hover{background:#fff;box-shadow:0 0 20px rgba(0,212,255,0.5);}
+.img-modal-close{position:absolute;top:-14px;right:-14px;width:30px;height:30px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.8rem;color:var(--tx);}
 </style>
 </head>
 <body>
@@ -822,78 +830,131 @@ function BonusSets({sets}){
   );
 }function SharePanel({res,dreamText,artType,artSeed,cardRef,dreamImg}){
   const [toast,setToast]=useState("");
+  const [imgModal,setImgModal]=useState(null); // {src, filename}
   const show=(m)=>{setToast(m);setTimeout(()=>setToast(""),2800);};
-  const copyLink=()=>{const u=window.location.href;navigator.clipboard?navigator.clipboard.writeText(u).then(()=>show("🔗 링크가 복사됐어요!")).catch(()=>show("링크: "+u)):show("링크: "+u);};
 
-  const savePNG=async()=>{
-    // AI 이미지가 있으면 → 이미지를 Canvas에 그려서 꿈 텍스트와 합성 후 저장
+  // 이미지를 Canvas에 운세 정보 합성해서 반환
+  const buildCanvas=()=>new Promise((resolve,reject)=>{
+    if(!dreamImg){reject(new Error("no image"));return;}
+    const img=new Image();
+    img.crossOrigin="anonymous";
+    img.onload=()=>{
+      const W=768,H=512;
+      const cv=document.createElement("canvas");cv.width=W;cv.height=H;
+      const ctx=cv.getContext("2d");
+      ctx.drawImage(img,0,0,W,H);
+      // 하단 그라디언트
+      const grad=ctx.createLinearGradient(0,H*0.45,0,H);
+      grad.addColorStop(0,"rgba(2,5,16,0)");
+      grad.addColorStop(1,"rgba(2,5,16,0.96)");
+      ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+      // 꿈 텍스트
+      ctx.fillStyle="rgba(232,244,255,0.88)";
+      ctx.font="italic 14px 'Noto Sans KR',sans-serif";
+      ctx.fillText('"'+(dreamText||"").slice(0,40)+(dreamText.length>40?"...":"")+'"',20,H-110);
+      // 운세 점수
+      ctx.fillStyle="#ffd700";
+      ctx.font="bold 13px 'Share Tech Mono',monospace";
+      ctx.fillText("💰 재물운 "+(res.wealth||0)+"점  ❤️ 애정운 "+(res.love||0)+"점  ⭐ 성공운 "+(res.success||0)+"점",20,H-82);
+      // Lucky 번호
+      ctx.fillStyle="#00d4ff";
+      ctx.font="bold 14px 'Orbitron',monospace";
+      ctx.fillText("LUCKY 6 : "+((res.lucky_numbers||[]).join("  ·  ")),20,H-52);
+      // 브랜드
+      ctx.fillStyle="rgba(0,212,255,0.6)";
+      ctx.font="11px 'Share Tech Mono',monospace";
+      ctx.fillText("DreamPick 6 · dreampick6.com",20,H-22);
+      resolve(cv);
+    };
+    img.onerror=reject;
+    img.src=dreamImg;
+  });
+
+  // 📸 클릭 → 이미지 모달 띄우기
+  const openImgModal=async()=>{
     if(dreamImg){
       try{
-        show("📸 이미지 저장 중...");
-        const img=new Image();
-        img.crossOrigin="anonymous";
-        img.onload=()=>{
-          const W=768,H=512;
-          const cv=document.createElement("canvas");cv.width=W;cv.height=H;
-          const ctx=cv.getContext("2d");
-          // 이미지 그리기
-          ctx.drawImage(img,0,0,W,H);
-          // 하단 그라디언트 오버레이
-          const grad=ctx.createLinearGradient(0,H*0.55,0,H);
-          grad.addColorStop(0,"rgba(2,5,16,0)");
-          grad.addColorStop(1,"rgba(2,5,16,0.92)");
-          ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
-          // 꿈 텍스트
-          ctx.fillStyle="rgba(232,244,255,0.92)";
-          ctx.font="italic 15px 'Noto Sans KR',sans-serif";
-          ctx.fillText('"'+(dreamText||"").slice(0,38)+(dreamText.length>38?"...":"")+'"',20,H-52);
-          // 브랜드
-          ctx.fillStyle="rgba(0,212,255,0.8)";
-          ctx.font="11px 'Share Tech Mono',monospace";
-          ctx.fillText("DreamPick 6 · AI VISION",20,H-24);
-          // 다운로드
-          const a=document.createElement("a");
-          a.download="dreampick6-"+Date.now()+".png";
-          a.href=cv.toDataURL("image/png");a.click();
-          show("✅ 이미지 저장 완료!");
-        };
-        img.onerror=()=>{show("⚠️ 이미지 로드 실패 · 직접 이미지를 길게 눌러 저장해보세요");};
-        img.src=dreamImg;
-      }catch{show("⚠️ 저장 실패 · 이미지를 길게 눌러 저장해보세요");}
-      return;
-    }
-    // AI 이미지 없을 때 → html2canvas로 카드 캡처
-    const card=cardRef?.current;
-    if(!card){show("⚠️ 카드를 먼저 불러와 주세요");return;}
-    try{
-      if(!window.html2canvas){
-        show("📸 라이브러리 로딩 중...");
-        await new Promise((rs,rj)=>{const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";s.onload=rs;s.onerror=rj;document.head.appendChild(s);});
+        show("📸 이미지 준비 중...");
+        const cv=await buildCanvas();
+        setImgModal({src:cv.toDataURL("image/png"),filename:"dreampick6-"+Date.now()+".png"});
+        setToast("");
+      }catch{
+        show("⚠️ 이미지 로드 실패 · 이미지를 길게 눌러 저장해보세요");
       }
-      show("📸 이미지 생성 중...");
-      const c=await window.html2canvas(card,{scale:2,backgroundColor:"#020510",useCORS:true,logging:false});
-      const a=document.createElement("a");a.download="dreampick6-"+Date.now()+".png";a.href=c.toDataURL("image/png");a.click();
-      show("✅ 저장 완료!");
-    }catch{show("⚠️ 저장 실패");}
+    } else {
+      // AI 이미지 없을 때 html2canvas
+      const card=cardRef?.current;
+      if(!card){show("⚠️ 카드를 먼저 불러와 주세요");return;}
+      try{
+        if(!window.html2canvas){
+          show("📸 라이브러리 로딩 중...");
+          await new Promise((rs,rj)=>{const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";s.onload=rs;s.onerror=rj;document.head.appendChild(s);});
+        }
+        show("📸 이미지 생성 중...");
+        const c=await window.html2canvas(card,{scale:2,backgroundColor:"#020510",useCORS:true,logging:false});
+        setImgModal({src:c.toDataURL("image/png"),filename:"dreampick6-"+Date.now()+".png"});
+        setToast("");
+      }catch{show("⚠️ 생성 실패");}
+    }
   };
-  const shareKakao=()=>{
+
+  // 다운로드
+  const downloadImg=()=>{
+    if(!imgModal)return;
+    const a=document.createElement("a");a.download=imgModal.filename;a.href=imgModal.src;a.click();
+    show("✅ 이미지 저장 완료!");
+    setImgModal(null);
+  };
+
+  // 카카오톡 공유 (운세+번호 포함)
+  const shareKakao=async()=>{
+    const lucky=(res.lucky_numbers||[]).join(", ");
     const title="🌙 내 꿈 해몽 결과 — DreamPick 6";
-    const desc="💰 재물운 "+res.wealth+"점 · ⭐ 성공운 "+res.success+"점\nLucky 6: "+(res.lucky_numbers||[]).join(", ");
-    if(navigator.share){navigator.share({title,text:desc,url:window.location.href}).catch(()=>{});}
-    else{window.open("https://sharer.kakao.com/talk/friends/picker/easylink?app_key=YOUR_KEY&url="+encodeURIComponent(window.location.href)+"&text="+encodeURIComponent(desc),"_blank");}
+    const desc=`💰 재물운 ${res.wealth}점  ❤️ 애정운 ${res.love}점  ⭐ 성공운 ${res.success}점\n🎱 Lucky 6 : ${lucky}\n\n${(dreamText||"").slice(0,30)}...\n\ndreampick6.com`;
+    if(navigator.share){
+      // 이미지 파일도 함께 공유 시도
+      if(dreamImg){
+        try{
+          const cv=await buildCanvas();
+          cv.toBlob(async(blob)=>{
+            const file=new File([blob],"dreampick6.png",{type:"image/png"});
+            if(navigator.canShare&&navigator.canShare({files:[file]})){
+              await navigator.share({title,text:desc,files:[file]}).catch(()=>{});
+            } else {
+              await navigator.share({title,text:desc,url:window.location.href}).catch(()=>{});
+            }
+          },"image/png");
+        }catch{
+          navigator.share({title,text:desc,url:window.location.href}).catch(()=>{});
+        }
+      } else {
+        navigator.share({title,text:desc,url:window.location.href}).catch(()=>{});
+      }
+    } else {
+      window.open("https://sharer.kakao.com/talk/friends/picker/easylink?url="+encodeURIComponent(window.location.href)+"&text="+encodeURIComponent(desc),"_blank");
+    }
     show("💛 카카오톡으로 공유합니다");
   };
+
   return(
     <>
       <div className="sp">
         <div className="cd tl"/><div className="cd tr"/>
         <div className="pl">결과 저장 & 공유</div>
         <div className="sb">
-          <div className="sbtn lk" onClick={copyLink}><span className="si">🔗</span><span className="sl3">링크 복사<br/>나중에 다시 보기</span></div>
-          <div className="sbtn pg" onClick={savePNG}><span className="si">📸</span><span className="sl3">이미지 저장<br/>SNS 공유하기</span></div>
-          <div className="sbtn kk" onClick={shareKakao}><span className="si">💛</span><span className="sl3">카카오톡 공유</span></div>
+          <div className="sbtn pg" onClick={openImgModal}><span className="si">📸</span><span className="sl3">이미지 보기<br/>& 저장하기</span></div>
+          <div className="sbtn kk" onClick={shareKakao}><span className="si">💛</span><span className="sl3">카카오톡<br/>공유하기</span></div>
         </div>
       </div>
+      {imgModal&&(
+        <div className="img-modal-bg" onClick={()=>setImgModal(null)}>
+          <div className="img-modal-box" onClick={e=>e.stopPropagation()}>
+            <div className="img-modal-close" onClick={()=>setImgModal(null)}>✕</div>
+            <img className="img-modal-img" src={imgModal.src} alt="dream"/>
+            <button className="img-modal-dl" onClick={downloadImg}>⬇ 이미지 다운로드</button>
+          </div>
+        </div>
+      )}
       {toast&&<div className="toast">{toast}</div>}
     </>
   );
@@ -1219,19 +1280,15 @@ function PWAInstall(){
         setShowBanner(false);
       });
     }
-
     const showIt = ()=>{
       if(sessionStorage.getItem('pwa_dismissed')) return;
       setShowBanner(true);
     };
-
-    // 이미 동의한 경우 3초 후 표시, 아니면 동의 이벤트 대기
     if(sessionStorage.getItem('dp6_agreed')){
       setTimeout(showIt, 3000);
     } else {
       window.addEventListener('show-pwa-banner', showIt);
     }
-
     return ()=> window.removeEventListener('show-pwa-banner', showIt);
   },[]);
 
