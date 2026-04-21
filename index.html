@@ -118,7 +118,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:'Noto Sans KR',sans-s
 .pf{height:100%;border-radius:3px;background:linear-gradient(90deg,rgba(0,80,180,.6),var(--az));transition:width 1.6s cubic-bezier(.23,1,.32,1);width:0%;}
 /* BALLS */
 .balls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;padding:10px 0 5px;}
-.ball{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-weight:900;font-size:.95rem;position:relative;cursor:default;transform:scale(0);transition:transform .5s cubic-bezier(.34,1.56,.64,1);}
+.ball{width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-weight:900;font-size:1.1rem;position:relative;cursor:default;transform:scale(0);transition:transform .5s cubic-bezier(.34,1.56,.64,1);box-shadow:0 0 18px rgba(0,0,0,0.4);}
 .ball.on{transform:scale(1);}
 .ball::after{content:'';position:absolute;top:6px;left:9px;width:9px;height:5px;background:rgba(255,255,255,.35);border-radius:50%;filter:blur(2px);}
 .b1{background:radial-gradient(circle at 35% 35%,#ffb347,#ff6b00);color:#fff;box-shadow:0 0 18px rgba(255,107,0,.6);}
@@ -838,6 +838,27 @@ function BonusSets({sets}){
       ))}
     </div>
   );
+function BonusSets({sets}){
+  if(!sets||!sets.length)return null;
+  return(
+    <div style={{marginTop:16,borderTop:"1px solid rgba(255,255,255,.08)",paddingTop:14}}>
+      <div style={{fontFamily:"'Share Tech Mono',monospace",fontSize:".58rem",color:"var(--dim)",letterSpacing:".18em",marginBottom:10}}>
+        ➕ 오행 상생 보조 번호 · 핵심 세트와 함께 구매 추천
+      </div>
+      {sets.map((s,i)=>(
+        <div key={i} style={{marginBottom:10,padding:"10px 12px",background:"rgba(255,255,255,.03)",borderRadius:8,border:"1px solid rgba(255,255,255,.07)"}}>
+          <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:7}}>
+            <span style={{fontFamily:"'Share Tech Mono',monospace",fontSize:".58rem",color:"var(--ac)",letterSpacing:".1em"}}>{s.label}</span>
+          </div>
+          <div className="balls" style={{justifyContent:"flex-start",gap:6}}>
+            {s.numbers?.map((n,j)=><SBall key={j} n={n} i={j}/>)}
+          </div>
+          <div style={{fontSize:".72rem",color:"rgba(232,244,255,.55)",marginTop:7,lineHeight:1.5}}>{s.desc}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
 }function SharePanel({res,dreamText,artType,artSeed,cardRef,dreamImg}){
   const [toast,setToast]=useState("");
   const [imgModal,setImgModal]=useState(null);
@@ -1611,9 +1632,10 @@ const d=await r.json();
             </div>
             <div className="p"><div className="cd tl"/><div className="cd tr"/><div className="pl">AI 꿈 해몽</div><div className="it">{stream}{streaming&&<span className="ic"/>}</div></div>
             <div className="p"><div className="cd tl"/><div className="cd tr"/><div className="cd bl"/><div className="cd br"/>
-              <div className="pl">Lucky 6 — 오행 수리학 기반 추천 번호</div>
+              <div className="pl" style={{fontSize:".7rem",letterSpacing:".15em",color:"var(--go)"}}>🎱 Lucky 6 — 오행 수리학 기반 추천 번호</div>
               <OhaengBanner artType={type} ohaengInfo={res.ohaeng_info}/>
               <Lucky numbers={res.lucky_numbers} reasons={res.number_reasons}/>
+              <BonusSets sets={res.bonus_sets}/>
               <BonusSets sets={res.bonus_sets}/>
             </div>
             <SharePanel res={res} dreamText={curTxt} artType={type} artSeed={seed} cardRef={cardRef} dreamImg={dreamImg}/>
