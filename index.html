@@ -569,7 +569,7 @@ html,body{background:var(--bg);color:var(--tx);font-family:'Noto Sans KR',sans-s
 /* 이미지 미리보기 모달 */
 .img-modal-bg{position:fixed;inset:0;z-index:9000;background:rgba(2,5,16,0.92);display:flex;align-items:center;justify-content:center;animation:fi .25s ease;}
 .img-modal-box{position:relative;max-width:92vw;max-height:90vh;display:flex;flex-direction:column;align-items:center;gap:14px;}
-.img-modal-img{max-width:100%;max-height:70vh;border-radius:14px;box-shadow:0 0 40px rgba(0,212,255,0.25);}
+.img-modal-img{max-width:100%;max-height:80vh;border-radius:14px;box-shadow:0 0 40px rgba(0,212,255,0.25);}
 .img-modal-dl{padding:13px 0;background:var(--az);color:#020510;border:none;border-radius:10px;font-family:'Orbitron',monospace;font-size:.78rem;font-weight:700;letter-spacing:.12em;cursor:pointer;transition:all .2s;width:100%;text-align:center;}
 .img-modal-dl:hover{background:#fff;box-shadow:0 0 20px rgba(0,212,255,0.5);}
 .img-modal-close{position:absolute;top:-14px;right:-14px;width:30px;height:30px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.8rem;color:var(--tx);}
@@ -849,7 +849,7 @@ function BonusSets({sets}){
     const img=new Image();
     img.crossOrigin="anonymous";
     img.onload=()=>{
-      const W=768,H=512;
+      const W=1280,H=854;
       const cv=document.createElement("canvas");cv.width=W;cv.height=H;
       const ctx=cv.getContext("2d");
       ctx.drawImage(img,0,0,W,H);
@@ -861,25 +861,25 @@ function BonusSets({sets}){
         const ip=(res.interpretation||"");
         const l1=ip.slice(0,40),l2=ip.slice(40,80),l3=ip.slice(80,116)+(ip.length>116?"...":"");
         ctx.fillStyle="rgba(232,244,255,0.88)";
-        ctx.font="13px 'Noto Sans KR',sans-serif";
-        if(l1)ctx.fillText(l1,20,H-118);
-        if(l2)ctx.fillText(l2,20,H-98);
-        if(l3)ctx.fillText(l3,20,H-78);
+        ctx.font="18px 'Noto Sans KR',sans-serif";
+        if(l1)ctx.fillText(l1,28,H-170);
+        if(l2)ctx.fillText(l2,28,H-144);
+        if(l3)ctx.fillText(l3,28,H-118);
         // LUCKY 6 레이블 (흰색)
         ctx.fillStyle="rgba(255,255,255,0.9)";
-        ctx.font="bold 12px 'Share Tech Mono',monospace";
-        ctx.fillText("LUCKY  6",20,H-52);
+        ctx.font="bold 16px 'Share Tech Mono',monospace";
+        ctx.fillText("LUCKY  6",28,H-76);
         // 번호들 (골드색, 간격 넓게)
         ctx.fillStyle="#ffd700";
-        ctx.font="bold 15px 'Orbitron',monospace";
+        ctx.font="bold 20px 'Orbitron',monospace";
         const nums=(res.lucky_numbers||[]);
         const labelW=ctx.measureText("LUCKY  6").width;
-        let nx=20+labelW+18;
+        let nx=28+labelW+24;
         nums.forEach((n,i)=>{
           const ns=String(n).padStart(2,"0");
-          ctx.fillText(ns,nx,H-52);
-          nx+=ctx.measureText(ns).width+20;
-          if(i<nums.length-1){ctx.fillStyle="rgba(255,215,0,0.4)";ctx.fillText("·",nx-12,H-52);ctx.fillStyle="#ffd700";}
+          ctx.fillText(ns,nx,H-76);
+          nx+=ctx.measureText(ns).width+26;
+          if(i<nums.length-1){ctx.fillStyle="rgba(255,215,0,0.4)";ctx.fillText("·",nx-14,H-76);ctx.fillStyle="#ffd700";}
         });
       } else {
         const grad=ctx.createLinearGradient(0,H*0.8,0,H);
@@ -888,8 +888,8 @@ function BonusSets({sets}){
         ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
       }
       ctx.fillStyle="rgba(0,212,255,0.7)";
-      ctx.font="11px 'Share Tech Mono',monospace";
-      ctx.fillText("DreamPick 6 · dreampick6.com",20,H-22);
+      ctx.font="15px 'Share Tech Mono',monospace";
+      ctx.fillText("DreamPick 6 · dreampick6.com",28,H-32);
       resolve(cv);
     };
     img.onerror=reject;
@@ -1239,7 +1239,7 @@ async function generateDreamImage(prompt) {
   // 무료 대안: Pollinations.ai
   const ghibliPrompt="Studio Ghibli anime style, hand-drawn watercolor, soft warm colors, magical dreamy atmosphere, Miyazaki inspired, peaceful and beautiful, "+prompt;
   return "https://image.pollinations.ai/prompt/"+encodeURIComponent(ghibliPrompt)
-    +"?width=768&height=512&nologo=true&seed="+Math.floor(Math.random()*9999);
+    +"?width=1280&height=854&nologo=true&seed="+Math.floor(Math.random()*9999);
 }
 
 const SYS=`당신은 DreamPick 6의 AI 꿈 해몽 엔진입니다. 동양 오행 수리학을 기반으로 번호를 선정합니다. 순수 JSON만 반환하세요. 마크다운 없이.
