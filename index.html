@@ -15,12 +15,12 @@
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://www.dreampick6.com"/>
 <meta property="og:title" content="DreamPick 6"/>
-<meta property="og:description" content="당신의 꿈을 부(Wealth)로 환산하는&#10;AI 꿈 해몽 + 오행 수리학 로또 번호"/>
+<meta property="og:description" content="어젯밤 그 꿈, 그냥 넘기실 건가요? 당신의 꿈 속 숨겨진 행운의 로또 시그널을 확인하세요!"/>
 <meta property="og:image" content="https://image.pollinations.ai/prompt/mystical%20moon%20app%20icon%20dark%20navy%20neon%20blue%20minimal?width=512&height=512&nologo=true&seed=6"/>
 <meta property="og:site_name" content="DreamPick 6"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="DreamPick 6"/>
-<meta name="twitter:description" content="당신의 꿈을 부(Wealth)로 환산하는 AI 꿈 해몽 서비스"/>
+<meta name="twitter:description" content="어젯밤 그 꿈, 그냥 넘기실 건가요? 당신의 꿈 속 숨겨진 행운의 로또 시그널을 확인하세요!"/>
 <meta name="twitter:image" content="https://image.pollinations.ai/prompt/mystical%20moon%20app%20icon%20dark%20navy%20neon%20blue%20minimal?width=512&height=512&nologo=true&seed=6"/>
 <link rel="apple-touch-icon" href="https://image.pollinations.ai/prompt/mystical%20moon%20app%20icon%20dark%20navy%20neon%20blue%20minimal?width=180&height=180&nologo=true&seed=6"/>
 <link rel="manifest" href="data:application/json,{%22name%22:%22DreamPick%206%22,%22short_name%22:%22DreamPick%206%22,%22description%22:%22AI%20%EA%BF%88%20%ED%95%B4%EB%AA%BD%20%2B%20%EC%98%A4%ED%96%89%20%EC%88%98%EB%A6%AC%ED%95%99%20%EB%A1%9C%EB%98%90%20%EB%B2%88%ED%98%B8%22,%22start_url%22:%22/%22,%22display%22:%22standalone%22,%22background_color%22:%22%23020510%22,%22theme_color%22:%22%23020510%22,%22icons%22:[{%22src%22:%22https://image.pollinations.ai/prompt/mystical%20moon%20app%20icon%20dark%20navy%20neon%20blue%20minimal?width=192&height=192&nologo=true&seed=6%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22},{%22src%22:%22https://image.pollinations.ai/prompt/mystical%20moon%20app%20icon%20dark%20navy%20neon%20blue%20minimal?width=512&height=512&nologo=true&seed=6%22,%22sizes%22:%22512x512%22,%22type%22:%22image/png%22}]}"/>
@@ -920,7 +920,7 @@ function BonusSets({sets}){
   // 카카오톡: 꿈/번호 없이 순수 이미지 + 브랜드 문구만
   const shareKakao=async()=>{
     const title="DreamPick 6";
-    const desc="당신의 꿈을 부(Wealth)로 환산하는\nAI 꿈 해몽 + 오행 수리학 로또 번호\ndreampick6.com";
+    const desc="어젯밤 그 꿈, 그냥 넘기실 건가요?\n당신의 꿈 속 숨겨진 행운의 로또 시그널을 확인하세요!\ndreampick6.com";
     if(navigator.share){
       if(dreamImg){
         try{
@@ -960,7 +960,7 @@ function BonusSets({sets}){
           <div className="img-modal-box" onClick={e=>e.stopPropagation()}>
             <div className="img-modal-close" onClick={()=>setImgModal(null)}>✕</div>
             <img className="img-modal-img" src={imgModal.src} alt="dream"/>
-            <button className="img-modal-dl" onClick={downloadImg}>⬇ 사진첩에 저장하기</button>
+            <button className="img-modal-dl" onClick={downloadImg}>⬇ 저장하기</button>
             <div style={{fontSize:".62rem",color:"rgba(232,244,255,0.45)",textAlign:"center",fontFamily:"'Share Tech Mono',monospace",lineHeight:1.8}}>
               📱 아이폰: 이미지를 <b style={{color:"rgba(0,212,255,0.7)"}}>꾹 눌러서</b> → <b style={{color:"rgba(0,212,255,0.7)"}}>사진 저장</b><br/>
               🤖 안드로이드: 위 버튼 클릭 시 갤러리에 저장
@@ -1225,8 +1225,9 @@ async function generateDreamImage(prompt) {
     const d = await r.json();
     if (d.data?.[0]?.url) return d.data[0].url;
   }
-  // 무료 대안: Pollinations.ai
-  return "https://image.pollinations.ai/prompt/"+encodeURIComponent(prompt)
+  // 무료 대안: Pollinations.ai (지브리 스타일 적용)
+  const ghibliPrompt = "Studio Ghibli anime style, hand-drawn watercolor illustration, soft warm colors, magical dreamy atmosphere, Hayao Miyazaki inspired, detailed background, gentle lighting, peaceful and beautiful, " + prompt;
+  return "https://image.pollinations.ai/prompt/"+encodeURIComponent(ghibliPrompt)
     +"?width=768&height=512&nologo=true&seed="+Math.floor(Math.random()*9999);
 }
 
@@ -1258,10 +1259,11 @@ number_reasons 작성: 각 번호마다 오행 배속 근거 + 꿈 연결 이유
 art_type: 물/강/비→water, 불/화재/태양→fire, 금/보석/동전→gold, 하늘/날기/구름→sky, 숲/흙/나무→earth, 그외→default
 
 image_prompt 규칙:
-1. 따뜻하고 치유적·희망적 분위기, 무서운 꿈도 긍정적 재해석
-2. 동양적 감성 (한옥, 한복, 수묵화 느낌)
-3. soft watercolor, dreamy pastel, ethereal glow, cinematic lighting
-4. 사람 등장 시 온화하고 밝은 표정, 어둡거나 불안한 요소 절대 금지`;
+1. 지브리 스튜디오 감성으로 따뜻하고 아름답게 표현
+2. 무서운 꿈도 반드시 평화롭고 희망적으로 재해석
+3. 꿈의 핵심 장면을 묘사, 자연/하늘/빛 요소 적극 활용
+4. 사람 등장 시 온화하고 밝은 표정, 어둡거나 불안한 요소 절대 금지
+5. 영어로 작성, 50자 이내로 간결하게`;
 
 /* ── PWA 설치 컴포넌트 ── */
 function PWAInstall(){
