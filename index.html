@@ -1241,7 +1241,7 @@ function ConfettiOverlay({grade, onClose}){
 }
 
 /* ── JournalItem (당첨 기능 포함) ── */
-function JournalItem({entry, onWin, isWinner}){
+function JournalItem({entry, onWin, isWinner, isShared}){
   const [open,setOpen]=useState(false);
   const grade=entry.winGrade;
   const g=grade?GRADE_INFO[grade]:null;
@@ -1282,14 +1282,22 @@ function JournalItem({entry, onWin, isWinner}){
             </div>
           )}
           <div className="jeg">
-            <div style={{borderRadius:9,overflow:"hidden",border:"1px solid rgba(0,212,255,.12)",aspectRatio:"4/3"}}><DreamArt artType={entry.artType||"default"} seed={entry.id*7} dreamText={entry.dreamText}/></div>
+            <div style={{borderRadius:9,overflow:"hidden",border:"1px solid rgba(0,212,255,.12)",aspectRatio:"4/3",position:"relative"}}>
+              {entry.imgUrl&&isShared?(
+                <img src={entry.imgUrl} alt="dream vision"
+                  style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}}
+                  onError={e=>{e.target.style.display="none";}}/>
+              ):(
+                <DreamArt artType={entry.artType||"default"} seed={entry.id*7} dreamText={entry.dreamText}/>
+              )}
+            </div>
             <div style={{display:"flex",flexDirection:"column",gap:9,justifyContent:"center"}}><Gauge label="재물운" value={entry.wealth} cls="gw" delay={50} small/><Gauge label="애정운" value={entry.love} cls="gl" delay={150} small/><Gauge label="성공운" value={entry.success} cls="gs" delay={250} small/></div>
           </div>
           <div style={{fontFamily:"'Share Tech Mono',monospace",fontSize:".55rem",color:"var(--az)",letterSpacing:".15em",marginBottom:5,opacity:.7}}>// LUCKY NUMBERS</div>
           <div className="jeb">{(entry.numbers||[]).map((n,i)=><Ball key={i} n={n} i={i} small/>)}</div>
           {entry.interp&&<div className="jei"><div className="jeil">// AI INTERPRETATION</div>{entry.interp}</div>}
           {/* 당첨 확인 */}
-          {!grade&&<WinCheck entry={entry} onWin={onWin}/>}
+          {!grade&&!isShared&&<WinCheck entry={entry} onWin={onWin}/>}
           <div className="sn"><div className="snd"/>공개 기록 · 누구나 열람 가능</div>
         </div>
       </div>
@@ -1637,7 +1645,17 @@ const d=await r.json();
       if(p.image_prompt){
         setImgLoading(true);
         generateDreamImage(p.image_prompt)
-          .then(url=>setDreamImg(url))
+          .then(url=>{
+            setDreamImg(url);
+            // 일지 항목에 imgUrl 추가
+            setJournal(prev=>prev.map(e=>e.id===newEntry.id?{...e,imgUrl:url}:e));
+            // 공유 일지에도 imgUrl 업데이트 (재전송)
+            fetch('/api/journal-post',{
+              method:'POST',
+              headers:{'Content-Type':'application/json'},
+              body:JSON.stringify({entry:{...newEntry,imgUrl:url}})
+            }).catch(()=>{});
+          })
           .catch(()=>setDreamImg(null))
           .finally(()=>setImgLoading(false));
       }
