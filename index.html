@@ -1283,7 +1283,7 @@ function JournalItem({entry, onWin, isWinner, isShared}){
           )}
           <div className="jeg">
             <div style={{borderRadius:9,overflow:"hidden",border:"1px solid rgba(0,212,255,.12)",aspectRatio:"4/3",position:"relative"}}>
-              {entry.imgUrl&&isShared?(
+              {entry.imgUrl?(
                 <img src={entry.imgUrl} alt="dream vision"
                   style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}}
                   onError={e=>{e.target.style.display="none";}}/>
@@ -1631,33 +1631,45 @@ const d=await r.json();
         const filtered=prev.filter(e=>e.id>1000);
         return [newEntry,...filtered];
       });
-      // 공유 일지에도 저장 (백그라운드)
-      fetch('/api/journal-post',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({entry:newEntry})
-      }).then(()=>{
-        // 공유 일지 새로고침
-        fetch('/api/journal-get').then(r=>r.json()).then(d=>setSharedJournal(d.entries||[])).catch(()=>{});
-      }).catch(()=>{});
-
-      // 2) 이미지 생성 (병렬 — 오버레이 뒤에서 조용히 진행)
+      // 2) 이미지 생성 후 한 번만 공유 저장 (이미지 포함)
       if(p.image_prompt){
         setImgLoading(true);
         generateDreamImage(p.image_prompt)
           .then(url=>{
             setDreamImg(url);
-            // 일지 항목에 imgUrl 추가
-            setJournal(prev=>prev.map(e=>e.id===newEntry.id?{...e,imgUrl:url}:e));
-            // 공유 일지에도 imgUrl 업데이트 (재전송)
+            const entryWithImg={...newEntry,imgUrl:url};
+            // 로컬 일지 imgUrl 추가
+            setJournal(prev=>prev.map(e=>e.id===newEntry.id?entryWithImg:e));
+            // 공유 일지에 이미지 포함해서 한 번만 저장
             fetch('/api/journal-post',{
               method:'POST',
               headers:{'Content-Type':'application/json'},
-              body:JSON.stringify({entry:{...newEntry,imgUrl:url}})
+              body:JSON.stringify({entry:entryWithImg})
+            }).then(()=>{
+              fetch('/api/journal-get').then(r=>r.json()).then(d=>setSharedJournal(d.entries||[])).catch(()=>{});
             }).catch(()=>{});
           })
-          .catch(()=>setDreamImg(null))
+          .catch(()=>{
+            // 이미지 없이 저장
+            fetch('/api/journal-post',{
+              method:'POST',
+              headers:{'Content-Type':'application/json'},
+              body:JSON.stringify({entry:newEntry})
+            }).then(()=>{
+              fetch('/api/journal-get').then(r=>r.json()).then(d=>setSharedJournal(d.entries||[])).catch(()=>{});
+            }).catch(()=>{});
+            setDreamImg(null);
+          })
           .finally(()=>setImgLoading(false));
+      } else {
+        // 이미지 프롬프트 없을 때 바로 저장
+        fetch('/api/journal-post',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({entry:newEntry})
+        }).then(()=>{
+          fetch('/api/journal-get').then(r=>r.json()).then(d=>setSharedJournal(d.entries||[])).catch(()=>{});
+        }).catch(()=>{});
       }
     }catch(e){setErr("회로 오류: "+e.message);}
     finally{setLoading(false);setHasAnalyzed(true);}
