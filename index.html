@@ -822,6 +822,79 @@ function Lucky({numbers,reasons}){
   );
 }
 
+
+function JournalSection({journal,sharedJournal,sharedLoading,onWin,onClear}){
+  const [tab,setTab]=useState("mine");
+  const myEntries=journal.filter(e=>e.id>1000);
+  const entries=tab==="mine"?journal:sharedJournal;
+  return(
+    <div className="js">
+      {/* 탭 헤더 */}
+      <div className="jt" style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+        <div style={{display:"flex",gap:0}}>
+          <button onClick={()=>setTab("mine")} style={{
+            fontFamily:"'Share Tech Mono',monospace",fontSize:".65rem",padding:"5px 14px",
+            background:tab==="mine"?"rgba(0,212,255,0.15)":"transparent",
+            border:tab==="mine"?"1px solid rgba(0,212,255,0.5)":"1px solid rgba(255,255,255,0.1)",
+            borderRadius:"8px 0 0 8px",color:tab==="mine"?"var(--az)":"var(--dim)",cursor:"pointer"
+          }}>
+            🌙 내 꿈 일지 {myEntries.length>0&&<span style={{opacity:.6}}>({myEntries.length})</span>}
+          </button>
+          <button onClick={()=>setTab("shared")} style={{
+            fontFamily:"'Share Tech Mono',monospace",fontSize:".65rem",padding:"5px 14px",
+            background:tab==="shared"?"rgba(123,47,255,0.15)":"transparent",
+            border:tab==="shared"?"1px solid rgba(123,47,255,0.5)":"1px solid rgba(255,255,255,0.1)",
+            borderRadius:"0 8px 8px 0",color:tab==="shared"?"var(--vi)":"var(--dim)",cursor:"pointer"
+          }}>
+            🌍 모두의 꿈 {sharedJournal.length>0&&<span style={{opacity:.6}}>({sharedJournal.length})</span>}
+          </button>
+        </div>
+        {tab==="mine"&&myEntries.length>0&&(
+          <button onClick={()=>{if(window.confirm("꿈 일지를 모두 삭제할까요?"))onClear();}}
+            style={{fontFamily:"'Share Tech Mono',monospace",fontSize:".55rem",color:"var(--dim)",
+              background:"transparent",border:"1px solid rgba(255,255,255,.1)",borderRadius:6,
+              padding:"3px 8px",cursor:"pointer"}}>
+            🗑 전체 삭제
+          </button>
+        )}
+      </div>
+      {/* 탭 설명 */}
+      {tab==="shared"&&(
+        <div style={{fontFamily:"'Share Tech Mono',monospace",fontSize:".58rem",color:"var(--dim)",
+          marginBottom:10,padding:"6px 10px",background:"rgba(123,47,255,0.06)",
+          borderRadius:8,border:"1px solid rgba(123,47,255,0.15)",lineHeight:1.7}}>
+          🌍 DreamPick 6를 이용한 모든 분들의 꿈 해몽이 실시간으로 쌓여요
+          <span style={{opacity:.5}}> · 30초마다 자동 갱신</span>
+        </div>
+      )}
+      {/* 로딩 */}
+      {tab==="shared"&&sharedLoading&&sharedJournal.length===0&&(
+        <div style={{textAlign:"center",padding:"20px 0",fontFamily:"'Share Tech Mono',monospace",
+          fontSize:".6rem",color:"var(--dim)"}}>
+          ✦ 꿈 일지 불러오는 중...
+        </div>
+      )}
+      {/* 빈 상태 */}
+      {tab==="mine"&&myEntries.length===0&&(
+        <div style={{textAlign:"center",padding:"20px 0",fontFamily:"'Share Tech Mono',monospace",
+          fontSize:".6rem",color:"var(--dim)"}}>
+          아직 분석한 꿈이 없어요 · 첫 번째 꿈을 입력해보세요 🌙
+        </div>
+      )}
+      {tab==="shared"&&!sharedLoading&&sharedJournal.length===0&&(
+        <div style={{textAlign:"center",padding:"20px 0",fontFamily:"'Share Tech Mono',monospace",
+          fontSize:".6rem",color:"var(--dim)"}}>
+          아직 공유된 꿈이 없어요 · 첫 번째 주인공이 되어보세요!
+        </div>
+      )}
+      {/* 목록 */}
+      <div className="tl">
+        {entries.map(e=><JournalItem key={e.id} entry={e} onWin={tab==="mine"?onWin:()=>{}} isShared={tab==="shared"}/>)}
+      </div>
+    </div>
+  );
+}
+
 function BonusSets({sets}){
   if(!sets||!sets.length)return null;
   return(
@@ -1445,8 +1518,44 @@ function App(){
   const [txt,setTxt]=useState("");
   const [loading,setLoading]=useState(false);
   const [hasAnalyzed,setHasAnalyzed]=useState(false);
+  const [sharedJournal,setSharedJournal]=useState([]);
+  const [sharedLoading,setSharedLoading]=useState(false);
+
+  // 공유 일지 불러오기
+  useEffect(()=>{
+    const loadShared=async()=>{
+      setSharedLoading(true);
+      try{
+        const r=await fetch('/api/journal-get');
+        const d=await r.json();
+        setSharedJournal(d.entries||[]);
+      }catch(e){}
+      finally{setSharedLoading(false);}
+    };
+    loadShared();
+    // 30초마다 새로고침
+    const iv=setInterval(loadShared,30000);
+    return()=>clearInterval(iv);
+  },[]);
+
+  // 꿈 일지 localStorage 저장 (최대 50개)
+  useEffect(()=>{
+    try{
+      const toSave=journal.slice(0,50);
+      localStorage.setItem('dp6_journal',JSON.stringify(toSave));
+    }catch(e){}
+  },[journal]);
   const [res,setRes]=useState(null);
-  const [journal,setJournal]=useState(SAMPLES);
+  const [journal,setJournal]=useState(()=>{
+    try{
+      const saved=localStorage.getItem('dp6_journal');
+      if(saved){
+        const parsed=JSON.parse(saved);
+        if(Array.isArray(parsed)&&parsed.length>0) return parsed;
+      }
+    }catch(e){}
+    return SAMPLES;
+  });
   const [err,setErr]=useState("");
   const [stream,setStream]=useState("");
   const [streaming,setStreaming]=useState(false);
@@ -1505,11 +1614,24 @@ const d=await r.json();
       setShowOv(true);setRes(p);setStreaming(true);
       let i=0;const iv=p.interpretation||"";
       const tm=setInterval(()=>{i+=2;setStream(iv.slice(0,i));if(i>=iv.length){clearInterval(tm);setStreaming(false);}},24);
-      setJournal(prev=>[{id:Date.now(),dreamText:txt,
+      const newEntry={id:Date.now(),dreamText:txt,
         date:new Date().toLocaleString("ko-KR",{month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}),
         wealth:p.wealth,love:p.love,success:p.success,prob:p.prob,
         numbers:p.lucky_numbers,reasons:p.number_reasons,
-        interp:p.interpretation,artType:p.art_type||"default"},...prev]);
+        interp:p.interpretation,artType:p.art_type||"default"};
+      setJournal(prev=>{
+        const filtered=prev.filter(e=>e.id>1000);
+        return [newEntry,...filtered];
+      });
+      // 공유 일지에도 저장 (백그라운드)
+      fetch('/api/journal-post',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({entry:newEntry})
+      }).then(()=>{
+        // 공유 일지 새로고침
+        fetch('/api/journal-get').then(r=>r.json()).then(d=>setSharedJournal(d.entries||[])).catch(()=>{});
+      }).catch(()=>{});
 
       // 2) 이미지 생성 (병렬 — 오버레이 뒤에서 조용히 진행)
       if(p.image_prompt){
@@ -1626,10 +1748,13 @@ const d=await r.json();
           </div>
         )}
 
-        <div className="js">
-          <div className="jt">꿈 일지 · Dream Journal</div>
-          <div className="tl">{journal.map(e=><JournalItem key={e.id} entry={e} onWin={handleWin}/>)}</div>
-        </div>
+        <JournalSection
+          journal={journal}
+          sharedJournal={sharedJournal}
+          sharedLoading={sharedLoading}
+          onWin={handleWin}
+          onClear={()=>{setJournal(SAMPLES);localStorage.removeItem('dp6_journal');}}
+        />
 
         {/* ── 푸터 ── */}
         <div className="footer">
@@ -1693,7 +1818,7 @@ const d=await r.json();
                     <p>전달된 내용은 분석 후 즉시 삭제되며 별도 서버에 저장되지 않습니다.</p>
                   </div>
                   <h3>보유 기간</h3>
-                  <p>별도 서버에 저장하지 않으며, 브라우저 종료 시 자동 삭제됩니다.</p>
+                  <p>별도 서버에 저장하지 않으며, 브라우저 로컬 저장소에만 저장되며, 서버로 전송되지 않습니다.</p>
                   <h3>제3자 위탁</h3>
                   <ul>
                     <li>Anthropic (Claude API) — 꿈 텍스트 분석</li>
