@@ -1631,45 +1631,32 @@ const d=await r.json();
         const filtered=prev.filter(e=>e.id>1000);
         return [newEntry,...filtered];
       });
-      // 2) 이미지 생성 후 한 번만 공유 저장 (이미지 포함)
+      // 2) 이미지 생성 (공유 저장은 이미지 완료 후 단 1회)
+      const saveToShared = (entry) => {
+        fetch('/api/journal-post',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({entry})
+        }).then(()=>{
+          fetch('/api/journal-get').then(r=>r.json()).then(d=>setSharedJournal(d.entries||[])).catch(()=>{});
+        }).catch(()=>{});
+      };
       if(p.image_prompt){
         setImgLoading(true);
         generateDreamImage(p.image_prompt)
           .then(url=>{
             setDreamImg(url);
             const entryWithImg={...newEntry,imgUrl:url};
-            // 로컬 일지 imgUrl 추가
             setJournal(prev=>prev.map(e=>e.id===newEntry.id?entryWithImg:e));
-            // 공유 일지에 이미지 포함해서 한 번만 저장
-            fetch('/api/journal-post',{
-              method:'POST',
-              headers:{'Content-Type':'application/json'},
-              body:JSON.stringify({entry:entryWithImg})
-            }).then(()=>{
-              fetch('/api/journal-get').then(r=>r.json()).then(d=>setSharedJournal(d.entries||[])).catch(()=>{});
-            }).catch(()=>{});
+            saveToShared(entryWithImg); // ← 이미지 포함 1회만
           })
           .catch(()=>{
-            // 이미지 없이 저장
-            fetch('/api/journal-post',{
-              method:'POST',
-              headers:{'Content-Type':'application/json'},
-              body:JSON.stringify({entry:newEntry})
-            }).then(()=>{
-              fetch('/api/journal-get').then(r=>r.json()).then(d=>setSharedJournal(d.entries||[])).catch(()=>{});
-            }).catch(()=>{});
             setDreamImg(null);
+            saveToShared(newEntry); // ← 이미지 실패 시 1회만
           })
           .finally(()=>setImgLoading(false));
       } else {
-        // 이미지 프롬프트 없을 때 바로 저장
-        fetch('/api/journal-post',{
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({entry:newEntry})
-        }).then(()=>{
-          fetch('/api/journal-get').then(r=>r.json()).then(d=>setSharedJournal(d.entries||[])).catch(()=>{});
-        }).catch(()=>{});
+        saveToShared(newEntry); // ← 이미지 없을 때 1회만
       }
     }catch(e){setErr("회로 오류: "+e.message);}
     finally{setLoading(false);setHasAnalyzed(true);}
