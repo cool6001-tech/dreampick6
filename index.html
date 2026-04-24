@@ -826,7 +826,7 @@ function Lucky({numbers,reasons}){
 function JournalSection({journal,sharedJournal,sharedLoading,onWin,onClear}){
   const [tab,setTab]=useState("mine");
   const myEntries=journal.filter(e=>e.id>1000);
-  const entries=tab==="mine"?journal:sharedJournal;
+  const entries=tab==="mine"?myEntries:sharedJournal;
   return(
     <div className="js">
       {/* 탭 헤더 */}
@@ -1629,7 +1629,10 @@ const d=await r.json();
         interp:p.interpretation,artType:p.art_type||"default"};
       setJournal(prev=>{
         const filtered=prev.filter(e=>e.id>1000);
-        return [newEntry,...filtered];
+        const next=[newEntry,...filtered];
+        // 즉시 localStorage에도 저장 (useEffect 대기 없이)
+        try{localStorage.setItem('dp6_journal',JSON.stringify(next));}catch(e2){}
+        return next;
       });
       // 2) 이미지 생성 (공유 저장은 이미지 완료 후 단 1회)
       const saveToShared = (entry) => {
